@@ -92,9 +92,9 @@ public:
 };
 //==================================================//
 
-class IBinary {
+class IBinary : public BinCodeMap {
     BinData initBinary(SpecCode type, const std::string& val);
-    BinData initBinary(unsigned int value);
-    unsigned int initFromBinary(const BinData& data);
+    BinData initBinary(int value);
+    int initFromBinary(const BinData& data);
 };
 //==================================================//

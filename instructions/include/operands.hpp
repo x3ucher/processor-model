@@ -27,6 +27,6 @@ public:
 
 class ImmediateOperand : public Operand {
 private:
-    unsigned int value_;
+    int value_;
 public:
 };
