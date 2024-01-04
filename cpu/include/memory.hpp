@@ -2,6 +2,7 @@
 
 #include "../utils/include/configconst.hpp"
 #include "../utils/include/binarycode.hpp"
+#include "../instructions/include/instructions.hpp"
 
 class DataMemory {
 private:
@@ -22,4 +23,12 @@ public:
 struct RAM {
     LabelMap labels;
     DataMemory memory;
+};
+
+class ProgramMemory {
+private:
+    std::vector<Instruction> program_;
+public:
+    ProgramMemory(CPU& cpu);
+    void execute();
 };

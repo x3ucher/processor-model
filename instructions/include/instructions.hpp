@@ -13,11 +13,3 @@ public:
     Instruction(std::vector<Token> tokens);
     void execute();
 };
-
-class ProgramMemory {
-private:
-    std::vector<Instruction> program_;
-public:
-    ProgramMemory(CPU& cpu);
-    void execute();
-};
