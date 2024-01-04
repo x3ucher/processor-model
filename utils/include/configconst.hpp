@@ -4,6 +4,7 @@
 #include <utility>
 #include <vector>
 #include <array>
+#include <memory>
 
 enum class OperandType{
     REGISTER_OPERAND = 253,
@@ -59,9 +60,14 @@ enum class SpecCode {
     ADDRESS,
     NUMBER,
     LABEL,
-    DIRECTORY, // 6
+    DIRECTORY, // 5
     END,
     UNKNOWN,
+};
+
+struct Token {
+    SpecCode type;
+    std::string name;
 };
 
 #endif // CONFIG_CONST_H

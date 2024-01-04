@@ -17,9 +17,9 @@ jg 0
 jge 0
 jl 0
 jle 0
-db 6
-dw 6
-dd 6
+db 5
+dw 5
+dd 5
 hlt 0
 init_thread 0
 end_thread 0
