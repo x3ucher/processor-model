@@ -4,7 +4,7 @@
 #include "../utils/include/binarycode.hpp"
 #include "../instructions/include/instructions.hpp"
 
-class DataMemory {
+class DataMemory : public IBinary {
 private:
     std::vector<BinData> data_;
 public:
@@ -12,12 +12,12 @@ public:
 
     // getters
     std::vector<BinData> getDump();
-    BinData getData(size_t address);
+    BinData getData(size_t address) const;
 
     // setters
     void loadDump(const std::vector<BinData>& data);
     void setData(size_t address, const std::vector<BinData>& value);
-    void setData(size_t address, unsigned int value);
+    void setData(size_t address, BinData value);
 };
 
 /* struct RAM {

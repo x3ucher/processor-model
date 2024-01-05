@@ -12,11 +12,10 @@ using CommandPtr = std::unique_ptr<Command>;
 //==================================================//
 
 class Command {
-private:
-    StatCode stat;
+protected:
     CPU processor;
 public:
-    Command(const Instruction& instruction, CPU& cpu);
+    Command(CPU& cpu) : processor(cpu) {}
     virtual ~Command() = 0;
 
     StatCode getStat() const;
@@ -27,43 +26,48 @@ public:
 //==================================================//
 
 class UnaryCommand : public Command {
-private:
+protected:
     OperandPtr operand;
 public:
     UnaryCommand(const Instruction& instruction, CPU& cpu);
-    virtual ~UnaryCommand();
+    virtual ~UnaryCommand() = 0;
 };
 
 class BinaryCommand : public Command {
-private:
+protected:
     std::pair<OperandPtr, OperandPtr> operands;
 public:
     BinaryCommand(const Instruction& instruction, CPU& cpu);
-    virtual ~BinaryCommand();
+    virtual ~BinaryCommand() = 0;
 };
 
 class JumpCommand : public Command {
-private:
-    std::string label;
+protected:
+    size_t label;
 public:
     JumpCommand(const Instruction& instruction, CPU& cpu);
-    virtual ~JumpCommand();
+    virtual ~JumpCommand() = 0;
 };
 
 class DataDeclaration : public Command {
-private:
+protected:
+    size_t address;
+    std::vector<OperandPtr> operands;
 public:
     DataDeclaration(const Instruction& instruction, CPU& cpu);
+    virtual ~DataDeclaration() = 0;
 };
 
 class ThreadInit {
-private:
+protected:
+    size_t label;
 public:
     ThreadInit(const Instruction& instruction, CPU& cpu);
+
 };
 
 class ThreadTerminate {
-private:
+protected:
 public:
     ThreadTerminate(const Instruction& instruction, CPU& cpu);
 };

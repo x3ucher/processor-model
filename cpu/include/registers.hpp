@@ -4,7 +4,7 @@
 
 struct Register {
     GPRegister name = GPRegister::r15;
-    uint64_t value = 0x00;
+    int value = 0x00;
     bool lock = false;
 };
 
@@ -14,18 +14,15 @@ private:
 public:
     // constructors
     RegisterBlock();
-    RegisterBlock(std::array<uint64_t, NUMBER_OF_GPR>& values);
-
-    // destructors
-    // ~RegisterBlock();
+    RegisterBlock(std::array<int, NUMBER_OF_GPR>& values);
 
     // getters
-    Register getRegister(GPRegister name);
+    Register getRegister(GPRegister name) const;
     bool isLocked(GPRegister name);
 
     // setters
-    void setRegister(GPRegister name, uint64_t value);
-    void setRegister(GPRegister name, uint64_t value, bool lock);
+    void setRegister(GPRegister name, int value);
+    void setRegister(GPRegister name, int value, bool lock);
     void setRegisters(const std::array<Register, NUMBER_OF_GPR>& registers);
 
     // other methods
