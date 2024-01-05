@@ -7,9 +7,10 @@
 
 class Instruction {
 private:
+    size_t label;
     uint8_t opcode;
     std::vector<OperandPtr> operands_;
 public:
-    Instruction(std::vector<Token> tokens);
+    Instruction(TokenLine tokens);
     void execute();
 };

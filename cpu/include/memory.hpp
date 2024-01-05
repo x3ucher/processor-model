@@ -20,15 +20,16 @@ public:
     void setData(size_t address, unsigned int value);
 };
 
-struct RAM {
+/* struct RAM {
     LabelMap labels;
     DataMemory memory;
-};
+}; */
 
 class ProgramMemory {
 private:
     std::vector<Instruction> program_;
 public:
     ProgramMemory(CPU& cpu);
+    void pushInstr(const Instruction& instr);
     void execute();
 };

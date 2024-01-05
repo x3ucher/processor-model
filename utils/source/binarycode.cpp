@@ -15,9 +15,14 @@ BinData IBinary::initBinary(SpecCode type, const std::string& val) {
         }
         binary.push_back(opcode);
     }
-    if (type == SpecCode::NUMBER || type == SpecCode::ADDRESS || type == SpecCode::LABEL) {
+    else if (type == SpecCode::NUMBER) {
         int value = std::stoi(val);
         return initBinary(value);
+    }
+    else if (type == SpecCode::ADDRESS || type == SpecCode::LABEL) {
+        int value = std::stoi(val);
+        binary.resize(sizeof(size_t));
+        std::memcpy(binary.data(), &value, sizeof(size_t));
     }
     else { binary.push_back(0xFF); }
     return { type, binary };

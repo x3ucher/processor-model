@@ -12,8 +12,6 @@ enum class OperandType{
     IMMEDIATE_OPERAND
 };
 
-typedef ;
-
 constexpr int NUMBER_OF_FLAGS = 4;
 
 // number of general purpose registers
@@ -62,12 +60,25 @@ enum class SpecCode {
     LABEL,
     DIRECTORY, // 5
     END,
-    UNKNOWN,
+    UNKNOWN
 };
 
 struct Token {
     SpecCode type;
     std::string name;
 };
+
+bool isInteger(const std::string& s) {
+    try {
+        std::stoi(s);
+        return true;
+    } 
+    catch(const std::invalid_argument& e) {
+        return false;
+    } 
+    catch(const std::out_of_range& e) {
+        return false;
+    }
+}
 
 #endif // CONFIG_CONST_H

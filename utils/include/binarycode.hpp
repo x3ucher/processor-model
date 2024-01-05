@@ -93,6 +93,7 @@ public:
 //==================================================//
 
 class IBinary : public BinCodeMap {
+public:    
     BinData initBinary(SpecCode type, const std::string& val);
     BinData initBinary(int value);
     int initFromBinary(const BinData& data);

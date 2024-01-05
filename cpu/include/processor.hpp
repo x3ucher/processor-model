@@ -12,6 +12,9 @@ private:
     RegisterBlock registers_;
     std::vector<Thread> threads_;
     RAM ram_;
+    ProgramMemory program_;
 public:
+    CPU();
 
+    void execute();
 };
