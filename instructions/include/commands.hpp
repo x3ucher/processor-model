@@ -56,6 +56,7 @@ protected:
 public:
     DataDeclaration(const Instruction& instruction, CPU& cpu);
     virtual ~DataDeclaration() = 0;
+    size_t getDataAddress() { return address; }
 };
 
 class ThreadInit {
