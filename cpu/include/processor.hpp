@@ -14,7 +14,16 @@ public:
     DataMemory ram_;
     ProgramMemory program_; 
 
+    // methods
     CPU();
+
+    // getters
+    StatCode getStat() const;
+    size_t getPC() const;
+
+    // setters
+    void setStat(StatCode stat);
+    void setPC(size_t address);
 
     void execute();
 };

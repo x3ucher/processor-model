@@ -35,15 +35,45 @@ ThreadInit::ThreadInit(const Instruction& instruction, CPU& cpu) : Command(cpu) 
 ThreadTerminate::ThreadTerminate(const Instruction& instruction, CPU& cpu) : Command(cpu) {}
 //=================================================//
 
+// Unary
 // INC
 INC::INC(const Instruction& instruction, CPU& cpu) : UnaryCommand(instruction, cpu) {}
 
 void INC::execute(){
     if (UnaryCommand::getOperand()) {
         operand_->setValue(operand_->getValue() + 1);
-        (StatCode::AOK);
+        processor.setStat(StatCode::AOK);
     }
     else {
-        setStat(StatCode::INS);
+        processor.setStat(StatCode::INS);
     }
 }
+//=================================================//
+
+// Binary
+// MOV
+MOV::MOV(const Instruction& instruction, CPU& cpu) : BinaryCommand(instruction, cpu) {}
+
+void MOV::execute() {
+    if (operands->first.getType() == OperandType::IMMEDIATE_OPERAND){
+        processor.setStat(StatCode::INS);
+    }
+    else {
+        (operands->first).setValue((operands->second).getValue);
+        processor.setStat(StatCode::AOK);
+    }
+}
+//=================================================//
+
+// Jumps
+// JMP
+JMP::JMP(const Instruction& instruction, CPU& cpu) : JumpCommand(instruction, cpu) {}
+
+void JMPFunc::execute() {
+    try {
+        processor.setPC(label - 1);
+        processor.setStat(StatCode::AOK);
+    }
+    catch(...) { processor.setStat(StatCode::INS); }
+}
+

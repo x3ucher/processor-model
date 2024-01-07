@@ -1,9 +1,9 @@
 #pragma once
 
-#include "configconst.hpp"
-#include "instructions.hpp"
+#include "../../utils/include/configconst.hpp"
+#include "../../instructions/include/instructions.hpp"
 #include "operands.hpp"
-#include "../cpu/include/processor.hpp"
+#include "../../cpu/include/processor.hpp"
 
 #include <memory>
 

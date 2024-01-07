@@ -27,9 +27,9 @@ public:
 
 class ProgramMemory {
 private:
-    std::vector<Instruction> program_;
+    std::vector<CommandPtr> program_;
 public:
     ProgramMemory(CPU& cpu);
-    void pushInstr(const Instruction& instr);
+    void pushCommand(const CommandPtr& command);
     void execute();
 };
