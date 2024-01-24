@@ -36,13 +36,13 @@ public:
 class Assemble : protected Lexer {
 private:    
     //RAM ram;
-    DataMemory ram;
+    CPU cpu;
     LabelMap value_names;
     LabelMap labels;
 public:
     void cleaner();
     void masking();
     void processDirectory(TokenLine line);
-    Assemble(const std::string& filename_, DataMemory& ram_) : Lexer(filename_), ram(ram_) {}
+    Assemble(const std::string& filename_, CPU& cpu_) : Lexer(filename_), cpu(cpu_) {}
     ProgramMemory interpreter();
 };

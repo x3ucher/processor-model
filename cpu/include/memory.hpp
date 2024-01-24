@@ -3,6 +3,8 @@
 #include "../utils/include/configconst.hpp"
 #include "../utils/include/binarycode.hpp"
 #include "../instructions/include/instructions.hpp"
+ 
+#include "iostream"
 
 class DataMemory : public IBinary {
 private:
@@ -13,11 +15,12 @@ public:
     // getters
     std::vector<BinData> getDump();
     BinData getData(size_t address) const;
+    size_t getLastAddress() { return data_.size() - 1; }
 
     // setters
     void loadDump(const std::vector<BinData>& data);
-    void setData(size_t address, const std::vector<BinData>& value);
-    void setData(size_t address, BinData value);
+    void setData(const BinData& value);
+    void setData(size_t address, const BinData& value);
 };
 
 /* struct RAM {

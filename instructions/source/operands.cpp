@@ -10,6 +10,25 @@ OperandType Operand::getType() const {
 RegisterOperand::RegisterOperand(const Token& token, CPU& cpu) {
     type_ = OperandType::REGISTER_OPERAND;
     processor_ = cpu;
+    switch(token.name) {
+        case "%rax": { register_ = GPRegister::rax; break; }
+        case "%rbx": { register_ = GPRegister::rbx; break; }
+        case "%rcx": { register_ = GPRegister::rcx; break; }
+        case "%rdx": { register_ = GPRegister::rdx; break; }
+        case "%rsp": { register_ = GPRegister::rsp; break; }
+        case "%rbp": { register_ = GPRegister::rbp; break; }
+        case "%rsi": { register_ = GPRegister::rsi; break; }
+        case "%rdi": { register_ = GPRegister::rdi; break; }
+        case "%r8": { register_ = GPRegister::r8; break; }
+        case "%r9": { register_ = GPRegister::r9; break; }
+        case "%r10": { register_ = GPRegister::r10; break; }
+        case "%r11": { register_ = GPRegister::r11; break; }
+        case "%r12": { register_ = GPRegister::r12; break; }
+        case "%r13": { register_ = GPRegister::r13; break; }
+        case "%r14": { register_ = GPRegister::r14; break; }
+        case "%r15": { register_ = GPRegister::r15; break; }
+        default { throw std::invalid_argument("invalid register name"); }
+    }
 }
 
 int RegisterOperand::getValue() const {
@@ -26,6 +45,7 @@ void RegisterOperand::setValue(int value) {
 MemoryOperand::MemoryOperand(const Token& token, CPU& cpu) {
     type_ = OperandType::MEMORY_OPERAND;
     processor_ = cpu;
+    address_ = toInteger(token.name);
 }
 
 int MemoryOperand::getValue() const {
@@ -48,6 +68,7 @@ void MemoryOperand::setValue(int value) {
 ImmediateOperand::ImmediateOperand(const Token& token, CPU& cpu) {
     type_ = OperandType::MEMORY_OPERAND;
     processor_ = cpu;
+    value_ = toInteger(token.name);
 }
 
 int ImmediateOperand::getValue() const {

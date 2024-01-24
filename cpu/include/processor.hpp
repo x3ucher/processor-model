@@ -10,7 +10,7 @@ public:
     StatCode stat_;
     std::array<bool, NUMBER_OF_FLAGS> flags_;
     RegisterBlock registers_;
-    std::vector<Thread> threads_;
+    // std::vector<Thread> threads_;
     DataMemory ram_;
     ProgramMemory program_; 
 

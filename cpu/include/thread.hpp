@@ -10,9 +10,10 @@
 class Thread {
 private:
     std::thread worker_;
-    std::mutex thread_mutex_;
+    
+    //std::mutex thread_mutex_;
     Register program_counter_;
-    bool is_ready_ = false;
+    //bool is_ready_ = false;
 public:
     // constructor
     Thread(RegisterBlock& block);

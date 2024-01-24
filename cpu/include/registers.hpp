@@ -14,11 +14,11 @@ private:
 public:
     // constructors
     RegisterBlock();
-    RegisterBlock(std::array<int, NUMBER_OF_GPR>& values);
+    RegisterBlock(const std::array<int, NUMBER_OF_GPR>& values);
 
     // getters
     Register getRegister(GPRegister name) const;
-    bool isLocked(GPRegister name);
+    bool isLocked(GPRegister name) const;
 
     // setters
     void setRegister(GPRegister name, int value);

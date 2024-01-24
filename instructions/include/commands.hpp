@@ -15,7 +15,7 @@ class Command {
 protected:
     CPU processor;
 public:
-    Command(CPU& cpu) : processor(cpu) {}
+    // Command(CPU& cpu) : processor(cpu) {}
     virtual ~Command() = 0;
 
     StatCode getStat() const;
@@ -29,7 +29,7 @@ class UnaryCommand : public Command {
 protected:
     OperandPtr operand;
 public:
-    UnaryCommand(const Instruction& instruction, CPU& cpu);
+    UnaryCommand(const Instruction& instruction);
     virtual ~UnaryCommand() = 0;
 };
 
@@ -37,7 +37,7 @@ class BinaryCommand : public Command {
 protected:
     std::pair<OperandPtr, OperandPtr> operands;
 public:
-    BinaryCommand(const Instruction& instruction, CPU& cpu);
+    BinaryCommand(const Instruction& instruction);
     virtual ~BinaryCommand() = 0;
 };
 
@@ -45,7 +45,7 @@ class JumpCommand : public Command {
 protected:
     size_t label;
 public:
-    JumpCommand(const Instruction& instruction, CPU& cpu);
+    JumpCommand(const Instruction& instruction);
     virtual ~JumpCommand() = 0;
 };
 
@@ -54,7 +54,7 @@ protected:
     size_t address;
     std::vector<OperandPtr> operands;
 public:
-    DataDeclaration(const Instruction& instruction, CPU& cpu);
+    DataDeclaration(const Instruction& instruction);
     virtual ~DataDeclaration() = 0;
     size_t getDataAddress() { return address; }
 };
@@ -63,41 +63,40 @@ class ThreadInit {
 protected:
     size_t label;
 public:
-    ThreadInit(const Instruction& instruction, CPU& cpu);
-
+    ThreadInit(const Instruction& instruction);
 };
 
 class ThreadTerminate {
 protected:
 public:
-    ThreadTerminate(const Instruction& instruction, CPU& cpu);
+    ThreadTerminate(const Instruction& instruction);
 };
 //==================================================//
 
 class INC : public UnaryCommand {
 public:
-    INC(const Instruction& instruction, CPU& cpu);
+    INC(const Instruction& instruction);
     void execute() override;
 };
 //==================================================//
 
 class MOV : public BinaryCommand {
 public:
-    MOV(const Instruction& instruction, CPU& cpu);
+    MOV(const Instruction& instruction);
     void execute() override;
 };
 //==================================================//
 
 class JMP : public JumpCommand {
 public:
-    JMP(const Instruction& instruction, CPU& cpu);
+    JMP(const Instruction& instruction);
     void execute() override;
 };
 //==================================================//
 
 class DD : public DataDeclaration {
 public:
-    DD(const Instruction& instruction, CPU& cpu);
+    DD(const Instruction& instruction);
     void execute() override;
 };
 //==================================================//

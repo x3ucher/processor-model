@@ -1,40 +1,40 @@
 #include "../include/assembler.hpp"
 
 explicit Lexer::Lexer(const std::string& filename){
-    std::ifstream file(filename);
+    std::ifstream file(filename); // open file
     if (!file.is_open()) {
         throw std::invalid_argument("invalid filename");
     }
 
-    std::string line; 
+    std::string line; // parse file to array of lines
     while (std::getline(file, line)) {
-        if (line.front() == ';') { continue; }
+        if (line.front() == ';') { continue; } // comment
         lines.push_back(tokenizeLine(line));
     }
 
-    TokenLine last; 
+    TokenLine last; // last line
     last.push_back({ SpecCode::END, "" });
     lines.push_back(last);
     file.close();
 }
 
 TokenLine Lexer::tokenizeLine(const std::string& line) {
-    TokenLine cur_line;
+    TokenLine cur_line; 
     std::istringstream iss(line);
     std::string token;
-    while(iss >> token) {
-        if (token.front() == ';') { break; }
+    while(iss >> token) { // patse line to tokens
+        if (token.front() == ';') { break; } // comment
         cur_line.push_back(createToken(token));
     }
     return cur_line;
 }
 
 Token Lexer::createToken(const std::string& token) {
-    if (token.back() == ':') {
+    if (token.back() == ':') { // label declarition
         return { SpecCode::LABEL, token.substr(0, token.size() - 1) }; // .substr(0, token.size() - 1)
     }
     std::string new_token = token;
-    if (token.back() == ','){
+    if (token.back() == ','){ // enumeration
         new_token = token.substr(0, token.size() - 1);
     }
     if (new_token.front() == '[' && new_token.back() == ']'){
@@ -44,48 +44,61 @@ Token Lexer::createToken(const std::string& token) {
         }
         return { SpecCode::ADDRESS, address };
     }
-    return { findOpcode(new_token), new_token };
+    return { findOpcode(new_token), new_token }; // numbers, labels, dirrectories and names
+}
+
+void Assemble::processDirectory(TokenLine line) {
+    for (size_t i = 2; i < line.size(); i++) {
+        if (line[i].type == SpecCode::UNKNOWN && isInteger(line[i].name)) {
+            line[i].type = SpecCode::NUMBER;
+        }
+        else if (line[i].type != SpecCode::NUMBER) {
+            throw std::invalid_argument("invalid asm code");
+        }
+    }
+    
 }
 
 
 void Assemble::cleaner() {
     // label declaration
     for (size_t i = 0; i < lines.size(); i++) {
-        if (lines[i][0].type == SpecCode::LABEL) {
-            if (lines[i].size() == 1) {
+        if (lines[i][0].type == SpecCode::LABEL) { // line starts with label
+            if (lines[i].size() == 1) { // label declaration
                 labels.pushLabel(lines[i][0].name, i);
             }
-            else if (lines[i][1].type == SpecCode::DIRECTORY) {
+            else if (lines[i][1].type == SpecCode::DIRECTORY) { // data declaration
                 processDirectory(lines[i]);
             }
             else { 
-                throw std::invalid_argument("invalid asm code");
+                throw std::invalid_argument("invalid asm code"); // error
             }
-            lines.erase(lines.begin() + i);
-            i--;
+            lines.erase(lines.begin() + i); // cleaning, because if its a label =>
+            i--; // remember the address, if its a data declaration => is a preproc instr
             continue;
         }
         break;
     }
+    // deleted label and data declaration
     for (size_t i = 0; i < lines.size(); i++) {
         bool flag = false;
         for (size_t j = 0; j < lines[i].size(); j++) {
-            if (lines[i][j].type == SpecCode::UNKNOWN) {
+            if (lines[i][j].type == SpecCode::UNKNOWN) { // unknown tokens
                 if (isInteger(lines[i][j].name)) {
-                    lines[i][j].type = SpecCode::NUMBER;
+                    lines[i][j].type = SpecCode::NUMBER; // number
                     continue;
                 }
-                int adr = labels.getAddress(lines[i][j].name);
+                int adr = labels.getAddress(lines[i][j].name); // check label
                 if (adr != -1) {
                     lines[i][j] = { SpecCode::LABEL, std::to_string(adr) };
                     continue;
                 }
-                adr = value_names.getAddress(lines[i][j].name);
+                adr = value_names.getAddress(lines[i][j].name); // check value name
                 if (adr != -1) {
                     lines[i][j] = { SpecCode::ADDRESS, std::to_string(adr) };
                     continue;
                 }
-                flag = true;
+                flag = true; // still unknown => error
                 break;
             }
             if (flag) { throw std::invalid_argument("invalid asm code"); }

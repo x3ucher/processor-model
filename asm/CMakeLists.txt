@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Добавляем исходные файлы
 set(SOURCE_FILES
-    source/asseble.cpp
+    source/assemble.cpp
 
     include/assembler.hpp
 )

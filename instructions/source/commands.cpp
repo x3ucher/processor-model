@@ -7,37 +7,37 @@ StatCode Command::getStat() const {
 //=================================================//
 
 // UnaryCommand
-UnaryCommand::UnaryCommand(const Instruction& instruction, CPU& cpu) : Command(cpu) {
+UnaryCommand::UnaryCommand(const Instruction& instruction) {
     operand = (instruction.getOperands())[0];
 }
 
 // BinaryCommand
-BinaryCommand::BinaryCommand(const Instruction& instruction, CPU& cpu) : Command(cpu) {
+BinaryCommand::BinaryCommand(const Instruction& instruction) {
     operands = { (instruction.getOperands())[0], (instruction.getOperands())[1] };
 }
 
 // JumpCommand
-JumpCommand::JumpCommand(const Instruction& instruction, CPU& cpu) : Command(cpu) {
+JumpCommand::JumpCommand(const Instruction& instruction) {
     label = instruction.getLabel();
 }
 
 // DataDeclaration
-DataDeclaration::DataDeclaration(const Instruction& instruction, CPU& cpu) : Command(cpu), address(0) {
+DataDeclaration::DataDeclaration(const Instruction& instruction) {
     operands = instruction.getOperands();
 }
 
 // ThreadInit
-ThreadInit::ThreadInit(const Instruction& instruction, CPU& cpu) : Command(cpu) {
+ThreadInit::ThreadInit(const Instruction& instruction) {
     label = instruction.getLabel();
 }
 
 // ThreadTerminate
-ThreadTerminate::ThreadTerminate(const Instruction& instruction, CPU& cpu) : Command(cpu) {}
+ThreadTerminate::ThreadTerminate(const Instruction& instruction) {}
 //=================================================//
 
 // Unary
 // INC
-INC::INC(const Instruction& instruction, CPU& cpu) : UnaryCommand(instruction, cpu) {}
+INC::INC(const Instruction& instruction) : UnaryCommand(instruction) {}
 
 void INC::execute(){
     if (UnaryCommand::getOperand()) {
@@ -52,7 +52,7 @@ void INC::execute(){
 
 // Binary
 // MOV
-MOV::MOV(const Instruction& instruction, CPU& cpu) : BinaryCommand(instruction, cpu) {}
+MOV::MOV(const Instruction& instruction) : BinaryCommand(instruction) {}
 
 void MOV::execute() {
     if (operands->first.getType() == OperandType::IMMEDIATE_OPERAND){
@@ -67,13 +67,29 @@ void MOV::execute() {
 
 // Jumps
 // JMP
-JMP::JMP(const Instruction& instruction, CPU& cpu) : JumpCommand(instruction, cpu) {}
+JMP::JMP(const Instruction& instruction) : JumpCommand(instruction) {}
 
-void JMPFunc::execute() {
+void JMP::execute() {
     try {
         processor.setPC(label - 1);
         processor.setStat(StatCode::AOK);
     }
     catch(...) { processor.setStat(StatCode::INS); }
 }
+//=================================================//
 
+// DataDeclaration
+// DD
+DD::DD(const Instruction& instruction) : DataDeclaration(instruction) {}
+
+void DD::execute() {
+    try {
+        address = processor.ram_.getLastAddress(); 
+        for (size_t i = 0; i < instruction.operands_.size(); i++) {
+            BinData bin = processor.ram_.initBinary(instruction.operands_[i].type, instruction.operands_[i].name);
+            processor.ram_.setData(bin);
+        }
+    }
+    catch(...) { processor.setStat(StatCode::INS); }
+}
+//=================================================//

@@ -81,4 +81,14 @@ bool isInteger(const std::string& s) {
     }
 }
 
+int toInteger(const std::string& s) {
+    try {
+        int val = std::stoi(s);
+        return val;
+    } 
+    catch(...) {
+        throw std::invalid_argument("argument isn't integer");
+    } 
+}
+
 #endif // CONFIG_CONST_H
