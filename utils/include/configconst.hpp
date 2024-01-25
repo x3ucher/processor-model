@@ -68,7 +68,7 @@ struct Token {
     std::string name;
 };
 
-bool isInteger(const std::string& s) {
+static bool isInteger(const std::string& s) {
     try {
         std::stoi(s);
         return true;
@@ -81,7 +81,7 @@ bool isInteger(const std::string& s) {
     }
 }
 
-int toInteger(const std::string& s) {
+static int toInteger(const std::string& s) {
     try {
         int val = std::stoi(s);
         return val;

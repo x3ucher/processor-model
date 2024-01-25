@@ -2,6 +2,7 @@
 
 #include "../../utils/include/configconst.hpp"
 #include "../../utils/include/binarycode.hpp"
+#include "../../instructions/instructions.hpp"
 #include "../../cpu/include/processor.hpp"
 
 enum class MaskInstr {
@@ -22,6 +23,8 @@ enum class MaskInstr {
 
 using TokenLine = std::vector<Token>;
 using ProgramLayout = std::vector<std::pair<MaskInstr, TokenLine>>;
+//======================================================//
+
 
 class Lexer : public TokenTypeMap  {
 public:
@@ -31,9 +34,24 @@ public:
     Token createToken(const std::string& token);
     TokenLine tokenizeLine(const std::string& line);
 };
+//======================================================//
 
 
-class Assemble : protected Lexer {
+using CommandCreator = std::function<CommandPtr()>;
+//example
+//CommandPtr command = op_table.commandCreate(0x01);
+
+class CodeTable {
+private:
+    std::unordered_map<uint8_t, CommandCreator> opcode_to_command_;
+public:
+    CodeTable();    
+    CommandPtr commandCreate(const Instruction& instr);
+};
+//======================================================//
+
+
+class Assemble : protected Lexer, protected CodeTable {
 private:    
     //RAM ram;
     CPU cpu;
@@ -46,3 +64,4 @@ public:
     Assemble(const std::string& filename_, CPU& cpu_) : Lexer(filename_), cpu(cpu_) {}
     ProgramMemory interpreter();
 };
+//======================================================//

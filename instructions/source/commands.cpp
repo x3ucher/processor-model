@@ -1,38 +1,52 @@
- #include "../include/commands.hpp"
+#include "../include/commands.hpp"
 
- // Command
+// Command
 StatCode Command::getStat() const {
     return processor.stat_;
 }
 //=================================================//
-
 // UnaryCommand
-UnaryCommand::UnaryCommand(const Instruction& instruction) {
+/* UnaryCommand::UnaryCommand(const Instruction& instruction) {
     operand = (instruction.getOperands())[0];
+}*/
+void UnaryCommand::setInstruction(const Instruction& instr) override {
+    operand = (instr.getOperands())[0];
 }
 
 // BinaryCommand
-BinaryCommand::BinaryCommand(const Instruction& instruction) {
+/* BinaryCommand::BinaryCommand(const Instruction& instruction) {
     operands = { (instruction.getOperands())[0], (instruction.getOperands())[1] };
+}*/
+void BinaryCommand::setInstruction(const Instruction& instr) override {
+    operands = { (instr.getOperands())[0], (instr.getOperands())[1] };
 }
 
 // JumpCommand
-JumpCommand::JumpCommand(const Instruction& instruction) {
+/* JumpCommand::JumpCommand(const Instruction& instruction) {
     label = instruction.getLabel();
+}*/
+void JumpCommand::setInstruction(const Instruction& instr) override {
+    label = instr.getLabel();
 }
 
 // DataDeclaration
-DataDeclaration::DataDeclaration(const Instruction& instruction) {
+/* DataDeclaration::DataDeclaration(const Instruction& instruction) {
     operands = instruction.getOperands();
+}*/
+void DataDeclaration::setInstruction(const Instruction& instr) override {
+    operands = instr.getOperands();
 }
 
 // ThreadInit
-ThreadInit::ThreadInit(const Instruction& instruction) {
+/* ThreadInit::ThreadInit(const Instruction& instruction) {
     label = instruction.getLabel();
+}*/
+void ThreadInit::setInstruction(const Instruction& instr) override {
+    label = instr.getLabel();
 }
 
 // ThreadTerminate
-ThreadTerminate::ThreadTerminate(const Instruction& instruction) {}
+/* ThreadTerminate::ThreadTerminate(const Instruction& instruction) {}*/
 //=================================================//
 
 // Unary

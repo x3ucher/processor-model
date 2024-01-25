@@ -1,8 +1,12 @@
 #pragma once
 
-#include "configconst.hpp"
+#include "../../utils/include/configconst.hpp"
 #include "../cpu/include/processor.hpp"
-#include "binarycode.hpp"
+#include "../../utils/include/binarycode.hpp"
+
+using OperandPtr = std::shared_ptr<Operand>;
+using CommandPtr = std::unique_ptr<Command>;
+//==================================================//
 
 class Operand {
 protected:

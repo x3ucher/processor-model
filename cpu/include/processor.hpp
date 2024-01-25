@@ -6,8 +6,9 @@
 #include "include/memory.hpp"
 
 class CPU {
-public:
+private:
     StatCode stat_;
+public:
     std::array<bool, NUMBER_OF_FLAGS> flags_;
     RegisterBlock registers_;
     // std::vector<Thread> threads_;
@@ -15,7 +16,7 @@ public:
     ProgramMemory program_; 
 
     // methods
-    CPU();
+    CPU::CPU() : stat_(StatCode::AOK), flags_({}), registers_(), ram_(), program_() {}
 
     // getters
     StatCode getStat() const;

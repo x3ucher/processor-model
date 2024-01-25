@@ -1,4 +1,4 @@
-#include "../include/memory.h"
+#include "../include/memory.hpp"
 
 DataMemory::DataMemory() { data_ = nullptr; }
 

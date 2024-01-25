@@ -1,8 +1,11 @@
 #pragma once
 
-#include "../../asm/include/assemble.hpp"
+
+
+
 #include "commands.hpp"
 #include "operands.hpp"
+
 //#include "../asm/include/assemble.hpp"
 
 class Instruction {
@@ -15,4 +18,14 @@ public:
     std::vector<OperandPtr> getOperands();
     size_t getLabel();
     // void execute();
+};
+
+class ProgramMemory {
+private:
+    std::vector<CommandPtr> program_;
+public:
+    ProgramMemory();
+    void pushCommand(const CommandPtr& command);
+    CommandPtr getCommand(size_t address);
+    void execute();
 };

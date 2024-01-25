@@ -1,5 +1,6 @@
 #include "../include/instructions.hpp"
 
+// Instruction
 Instruction::Instruction(const TokenLine& tokens, CPU& cpu) {
     for (Token cur : tokens) {
         switch(cur.type) {
@@ -33,7 +34,9 @@ Instruction::Instruction(const TokenLine& tokens, CPU& cpu) {
         }
     }
 }
+//=================================================//
 
+// utils
 std::vector<OperandPtr> Instruction::getOperands() {
     return operands_;
 }
@@ -41,3 +44,16 @@ std::vector<OperandPtr> Instruction::getOperands() {
 size_t Instruction::getLabel() {
     return label;
 }
+//================================================//
+
+// ProgramMemory
+ProgramMemory::ProgramMemory() {}
+
+void ProgramMemory::pushCommand(const CommandPtr& command) {
+    program_.push_back(command);
+}
+
+CommandPtr ProgramMemory::getCommand(size_t address) {
+    return program_[address];
+}
+//================================================//

@@ -2,7 +2,7 @@
 
 #include "../utils/include/configconst.hpp"
 #include "../utils/include/binarycode.hpp"
-#include "../instructions/include/instructions.hpp"
+#include "../instructions/include/commands.hpp"
  
 #include "iostream"
 
@@ -27,12 +27,3 @@ public:
     LabelMap labels;
     DataMemory memory;
 }; */
-
-class ProgramMemory {
-private:
-    std::vector<CommandPtr> program_;
-public:
-    ProgramMemory(CPU& cpu);
-    void pushCommand(const CommandPtr& command);
-    void execute();
-};

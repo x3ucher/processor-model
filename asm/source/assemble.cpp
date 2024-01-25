@@ -1,5 +1,6 @@
 #include "../include/assembler.hpp"
 
+// Lexer
 explicit Lexer::Lexer(const std::string& filename){
     std::ifstream file(filename); // open file
     if (!file.is_open()) {
@@ -46,7 +47,9 @@ Token Lexer::createToken(const std::string& token) {
     }
     return { findOpcode(new_token), new_token }; // numbers, labels, dirrectories and names
 }
+//===========================================================//
 
+// Assemble
 void Assemble::processDirectory(TokenLine line) {
     for (size_t i = 2; i < line.size(); i++) {
         if (line[i].type == SpecCode::UNKNOWN && isInteger(line[i].name)) {
@@ -56,9 +59,11 @@ void Assemble::processDirectory(TokenLine line) {
             throw std::invalid_argument("invalid asm code");
         }
     }
-    
+    Instruction instr(line);
+    CommandPtr command = commandCreate(instr);
+    command->execute();
+    value_names.pushLabel(line[0].name, commad->getDataAddress());
 }
-
 
 void Assemble::cleaner() {
     // label declaration
@@ -105,3 +110,50 @@ void Assemble::cleaner() {
         }
     }
 }
+//===========================================================//
+
+// CodeTable methods
+CodeTable::CodeTable() {
+    opcode_to_command_[0x01] = []() { return std::make_unique<MOV>(); };
+    // arithmetic
+    opcode_to_command_[0x02] = []() { return std::make_unique<ADD>(); };
+    opcode_to_command_[0x03] = []() { return std::make_unique<SUB>(); };
+    opcode_to_command_[0x04] = []() { return std::make_unique<INC>(); };
+    opcode_to_command_[0x05] = []() { return std::make_unique<DEC>(); };
+    // logic
+    opcode_to_command_[0x06] = []() { return std::make_unique<NOT>(); };
+    opcode_to_command_[0x07] = []() { return std::make_unique<AND>(); };
+    opcode_to_command_[0x08] = []() { return std::make_unique<OR>(); };
+    opcode_to_command_[0x09] = []() { return std::make_unique<XOR>(); };
+    opcode_to_command_[0x0A] = []() { return std::make_unique<CMP>(); };
+    // shifts
+    opcode_to_command_[0x0B] = []() { return std::make_unique<SHL>(); };
+    opcode_to_command_[0x0C] = []() { return std::make_unique<SHR>(); };
+    // jumps
+    opcode_to_command_[0x0D] = []() { return std::make_unique<JMP>(); };
+    opcode_to_command_[0x0E] = []() { return std::make_unique<JE>(); };
+    opcode_to_command_[0x0F] = []() { return std::make_unique<JNE>(); };
+    opcode_to_command_[0x10] = []() { return std::make_unique<JG>(); };
+    opcode_to_command_[0x11] = []() { return std::make_unique<JGE>(); };
+    opcode_to_command_[0x12] = []() { return std::make_unique<JL>(); };
+    opcode_to_command_[0x13] = []() { return std::make_unique<JLE>(); };
+    // data definition
+    opcode_to_command_[0x14] = []() { return std::make_unique<DB>(); };
+    opcode_to_command_[0x15] = []() { return std::make_unique<DW>(); };
+    opcode_to_command_[0x16] = []() { return std::make_unique<DD>(); };
+    // misc
+    opcode_to_command_[0x17] = []() { return std::make_unique<HLT>(); };
+    opcode_to_command_[0x18] = []() { return std::make_unique<ThreadInit>(); };
+    opcode_to_command_[0x19] = []() { return std::make_unique<ThreadTerminate>(); };
+}
+
+CommandPtr CodeTable::commandCreate(const Instruction& instr){
+    auto it = opcode_to_command_.find(instr.opcode);
+    if (it == opcode_to_command_.end()) {
+        (it->second())->setInstruction(instr);
+        return it->second();
+    }
+    throw std::runtime_error("invalid opcode");
+}
+
+//===========================================================//
