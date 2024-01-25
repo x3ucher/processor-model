@@ -18,7 +18,6 @@ public:
 
     // getters
     Register getRegister(GPRegister name) const;
-    bool isLocked(GPRegister name);
 
     // setters
     void setRegister(GPRegister name, int value);

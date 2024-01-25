@@ -31,7 +31,7 @@ TEST_CASE("RegisterBlock: Initialization") {
 
     SECTION("Check all registers unlocked") {
         for (size_t i = 0; i < NUMBER_OF_GPR; ++i) {
-            REQUIRE(regBlock.isLocked(static_cast<GPRegister>(i)) == false);
+            REQUIRE(regBlock.getRegister(static_cast<GPRegister>(i)).lock == false);
         }
     }
     
@@ -42,21 +42,21 @@ TEST_CASE("RegisterBlock: Initialization") {
 
     SECTION("Check locking/unlocking individual register") {
         regBlock.lockRegister(GPRegister::rax);
-        REQUIRE(regBlock.isLocked(GPRegister::rax) == true);
+        REQUIRE(regBlock.getRegister(GPRegister::rax).lock == true);
 
         regBlock.unlockRegister(GPRegister::rax);
-        REQUIRE(regBlock.isLocked(GPRegister::rax) == false);
+        REQUIRE(regBlock.getRegister(GPRegister::rax).lock == false);
     }
 
     SECTION("Check locking/unlocking all registers") {
         regBlock.lockAll();
         for (size_t i = 0; i < NUMBER_OF_GPR; ++i) {
-            REQUIRE(regBlock.isLocked(static_cast<GPRegister>(i)) == true);
+            REQUIRE(regBlock.getRegister(static_cast<GPRegister>(i)).lock == true);
         }
 
         regBlock.unlockAll();
         for (size_t i = 0; i < NUMBER_OF_GPR; ++i) {
-            REQUIRE(regBlock.isLocked(static_cast<GPRegister>(i)) == false);
+            REQUIRE(regBlock.getRegister(static_cast<GPRegister>(i)).lock == false);
         }
     }
 }

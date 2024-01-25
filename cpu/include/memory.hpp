@@ -2,7 +2,6 @@
 
 #include "../utils/include/configconst.hpp"
 #include "../utils/include/binarycode.hpp"
-#include "../instructions/include/commands.hpp"
  
 #include "iostream"
 
@@ -22,8 +21,3 @@ public:
     void setData(const BinData& value);
     void setData(size_t address, const BinData& value);
 };
-
-/* struct RAM {
-    LabelMap labels;
-    DataMemory memory;
-}; */

@@ -18,9 +18,11 @@ Register RegisterBlock::getRegister(GPRegister name) const {
     return registers_[static_cast<size_t>(name)];
 }
 
+/*
 bool isLocked(GPRegister name) {
-    return registers_[static_cast<size_t>(name)].lock;
+    return (registers_[static_cast<size_t>(name)]).lock;
 }
+*/
 
 // setters
 void RegisterBlock::setRegister(GPRegister name, int value) {
@@ -42,8 +44,8 @@ void RegisterBlock::lockRegister(GPRegister name) {
 }
 
 void RegisterBlock::lockAll() {
-    for (size_t i; i < NUMBER_OF_GPR; i++) {
-        registers_[i].lock = true;
+    for (size_t i = 0; i < NUMBER_OF_GPR; i++) {
+        registers_[i].lock = true;  
     }
 }
 
@@ -52,7 +54,7 @@ void RegisterBlock::unlockRegister(GPRegister name) {
 }
 
 void RegisterBlock::unlockAll() {
-    for (size_t i; i < NUMBER_OF_GPR; i++) {
+    for (size_t i = 0; i < NUMBER_OF_GPR; i++) {
         registers_[i].lock = false;
     }
 }
