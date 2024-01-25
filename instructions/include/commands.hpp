@@ -11,13 +11,12 @@ class Command {
 protected:
     CPU processor;
 public:
-    // Command(CPU& cpu) : processor(cpu) {}
     virtual ~Command() = 0;
 
     StatCode getStat() const;
     void setStat(StatCode stat);
 
-    virtual void setInstruction(const Instruction& instruction);
+    virtual void setInstruction(Instruction& instruction);
     virtual void execute() = 0;
 };
 //==================================================//
@@ -26,20 +25,20 @@ class UnaryCommand : public Command {
 protected:
     OperandPtr operand;
 public:
-    UnaryCommand() : operand(nullptr) {}
+    UnaryCommand();
     virtual ~UnaryCommand() = 0;
 
-    void setInstruction(const Instruction& instruction) override;
+    void setInstruction(Instruction& instruction) override;
 };
 
 class BinaryCommand : public Command {
 protected:
     std::pair<OperandPtr, OperandPtr> operands;
 public:
-    BinaryCommand() : operands(nullptr) {}
+    BinaryCommand();
     virtual ~BinaryCommand() = 0;
 
-    void setInstruction(const Instruction& instruction) override;
+    void setInstruction(Instruction& instruction) override;
 };
 
 class JumpCommand : public Command {
@@ -49,7 +48,7 @@ public:
     JumpCommand() : label(0) {}
     virtual ~JumpCommand() = 0;
 
-    void setInstruction(const Instruction& instruction) override;
+    void setInstruction(Instruction& instruction) override;
 };
 
 class DataDeclaration : public Command {
@@ -57,54 +56,54 @@ protected:
     size_t address;
     std::vector<OperandPtr> operands;
 public:
-    DataDeclaration() : address(0), operands(nullptr) {}
+    DataDeclaration();
     virtual ~DataDeclaration() = 0;
     size_t getDataAddress() { return address; }
 
-    void setInstruction(const Instruction& instruction) override;
+    void setInstruction(Instruction& instruction) override;
 };
 
-class ThreadInit {
+class ThreadInit : public Command {
 protected:
     size_t label;
 public:
-    ThreadInit() : label(0) {}
+    ThreadInit();
 
-    void setInstruction(const Instruction& instruction) override;
+    void setInstruction(Instruction& instruction) override;
 };
 
-class ThreadTerminate {
+class ThreadTerminate : public Command {
 protected:
 public:
     ThreadTerminate() {}
-    void setInstruction(const Instruction& instruction) override;
+    void setInstruction(Instruction& instruction) override;
 };
 //==================================================//
 
 class INC : public UnaryCommand {
 public:
-    INC() : UnaryCommand() {}
+    INC();
     void execute() override;
 };
 //==================================================//
 
 class MOV : public BinaryCommand {
 public:
-    MOV() : BinaryCommand() {}
+    MOV();
     void execute() override;
 };
 //==================================================//
 
 class JMP : public JumpCommand {
 public:
-    JMP() : JumpCommand() {}
+    JMP();
     void execute() override;
 };
 //==================================================//
 
 class DD : public DataDeclaration {
 public:
-    DD() : DataDeclaration() {}
+    DD();
     void execute() override;
 };
 //==================================================//

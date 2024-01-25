@@ -1,24 +1,22 @@
 #pragma once
 
-
-
-
-#include "commands.hpp"
+#include "../../cpu/include/processor.hpp"
+#include "../../asm/include/assembler.hpp"
 #include "operands.hpp"
-
-//#include "../asm/include/assemble.hpp"
+#include <memory>
 
 class Instruction {
 private:
+    CPU cpu_;
     size_t label;
     uint8_t opcode;
     std::vector<OperandPtr> operands_;
 public:
-    Instruction(const TokenLine& tokens);
+    Instruction(const TokenLine& tokens, CPU& cpu);
     std::vector<OperandPtr> getOperands();
     size_t getLabel();
     uint8_t getOpcode() const { return opcode; }
-    // void execute();
+    CPU& getCPU() { return cpu_; }
 };
 
 class ProgramMemory {

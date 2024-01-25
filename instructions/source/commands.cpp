@@ -2,14 +2,15 @@
 
 // Command
 StatCode Command::getStat() const {
-    return processor.stat_;
+    return processor.getStat();
 }
 //=================================================//
 // UnaryCommand
 /* UnaryCommand::UnaryCommand(const Instruction& instruction) {
     operand = (instruction.getOperands())[0];
 }*/
-void UnaryCommand::setInstruction(const Instruction& instr) override {
+void UnaryCommand::setInstruction(Instruction& instr) {
+    processor = instr.getCPU();
     operand = (instr.getOperands())[0];
 }
 
@@ -17,15 +18,17 @@ void UnaryCommand::setInstruction(const Instruction& instr) override {
 /* BinaryCommand::BinaryCommand(const Instruction& instruction) {
     operands = { (instruction.getOperands())[0], (instruction.getOperands())[1] };
 }*/
-void BinaryCommand::setInstruction(const Instruction& instr) override {
-    operands = { (instr.getOperands())[0], (instr.getOperands())[1] };
+void BinaryCommand::setInstruction(Instruction& instr) {
+    processor = instr.getCPU();
+    operands = std::make_pair((instr.getOperands())[0], (instr.getOperands())[1]);
 }
 
 // JumpCommand
 /* JumpCommand::JumpCommand(const Instruction& instruction) {
     label = instruction.getLabel();
 }*/
-void JumpCommand::setInstruction(const Instruction& instr) override {
+void JumpCommand::setInstruction(Instruction& instr) {
+    processor = instr.getCPU();
     label = instr.getLabel();
 }
 
@@ -33,7 +36,8 @@ void JumpCommand::setInstruction(const Instruction& instr) override {
 /* DataDeclaration::DataDeclaration(const Instruction& instruction) {
     operands = instruction.getOperands();
 }*/
-void DataDeclaration::setInstruction(const Instruction& instr) override {
+void DataDeclaration::setInstruction(Instruction& instr) {
+    processor = instr.getCPU();
     operands = instr.getOperands();
 }
 
@@ -41,7 +45,8 @@ void DataDeclaration::setInstruction(const Instruction& instr) override {
 /* ThreadInit::ThreadInit(const Instruction& instruction) {
     label = instruction.getLabel();
 }*/
-void ThreadInit::setInstruction(const Instruction& instr) override {
+void ThreadInit::setInstruction(Instruction& instr) {
+    processor = instr.getCPU();
     label = instr.getLabel();
 }
 
@@ -51,11 +56,11 @@ void ThreadInit::setInstruction(const Instruction& instr) override {
 
 // Unary
 // INC
-INC::INC(const Instruction& instruction) : UnaryCommand(instruction) {}
+//INC::INC(Instruction& instruction) : UnaryCommand(instruction) {}
 
 void INC::execute(){
-    if (UnaryCommand::getOperand()) {
-        operand_->setValue(operand_->getValue() + 1);
+    if (operand) {
+        operand->setValue(operand->getValue() + 1);
         processor.setStat(StatCode::AOK);
     }
     else {
@@ -66,14 +71,14 @@ void INC::execute(){
 
 // Binary
 // MOV
-MOV::MOV(const Instruction& instruction) : BinaryCommand(instruction) {}
+//MOV::MOV(const Instruction& instruction) : BinaryCommand(instruction) {}
 
 void MOV::execute() {
-    if (operands->first.getType() == OperandType::IMMEDIATE_OPERAND){
+    if (operands.first->getType() == OperandType::IMMEDIATE_OPERAND){
         processor.setStat(StatCode::INS);
     }
     else {
-        (operands->first).setValue((operands->second).getValue);
+        operands.first->setValue(operands.second->getValue);
         processor.setStat(StatCode::AOK);
     }
 }
@@ -81,7 +86,7 @@ void MOV::execute() {
 
 // Jumps
 // JMP
-JMP::JMP(const Instruction& instruction) : JumpCommand(instruction) {}
+//JMP::JMP(const Instruction& instruction) : JumpCommand(instruction) {}
 
 void JMP::execute() {
     try {
@@ -94,13 +99,13 @@ void JMP::execute() {
 
 // DataDeclaration
 // DD
-DD::DD(const Instruction& instruction) : DataDeclaration(instruction) {}
+//DD::DD(const Instruction& instruction) : DataDeclaration(instruction) {}
 
 void DD::execute() {
     try {
         address = processor.ram_.getLastAddress(); 
-        for (size_t i = 0; i < instruction.operands_.size(); i++) {
-            BinData bin = processor.ram_.initBinary(instruction.operands_[i].type, instruction.operands_[i].name);
+        for (size_t i = 0; i < operands.size(); i++) {
+            BinData bin = processor.ram_.initBinary(operands[i].type, operands[i].name);
             processor.ram_.setData(bin);
         }
     }

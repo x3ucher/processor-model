@@ -2,30 +2,31 @@
 
 // Instruction
 Instruction::Instruction(const TokenLine& tokens, CPU& cpu) {
+    cpu_ = cpu;
     for (Token cur : tokens) {
         switch(cur.type) {
             case SpecCode::ADDRESS: {
-                operands_.push_back(MemoryOperand(cur, cpu));
+                operands_.push_back(std::make_shared<Operand>(MemoryOperand(cur, cpu)));
                 break;
             }
             case SpecCode::REGISTER: {
-                operands_.push_back(RegisterOperand(cur, cpu));
+                operands_.push_back(std::make_shared<Operand>(RegisterOperand(cur, cpu)));
                 break;
             }
             case SpecCode::NUMBER: {
-                operands_.push_back(ImmediateOperand(cur, cpu));
+                operands_.push_back(std::make_shared<Operand>(ImmediateOperand(cur, cpu)));
                 break;
             }
             case SpecCode::LABEL: {
-                label = cur.name;
+                label = static_cast<size_t>(toInteger(cur.name));
                 break;
             }
             case SpecCode::DIRECTORY: {
-                opcode = cur.name
+                opcode = static_cast<uint8_t>(toInteger(cur.name));
                 break;
             }
             case SpecCode::MNEMONIC: {
-                opcode = cur.name:
+                opcode = static_cast<uint8_t>(toInteger(cur.name));
                 break;
             }
             default: {

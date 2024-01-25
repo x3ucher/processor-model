@@ -10,25 +10,24 @@ OperandType Operand::getType() const {
 RegisterOperand::RegisterOperand(const Token& token, CPU& cpu) {
     type_ = OperandType::REGISTER_OPERAND;
     processor_ = cpu;
-    switch(token.name) {
-        case "%rax": { register_ = GPRegister::rax; break; }
-        case "%rbx": { register_ = GPRegister::rbx; break; }
-        case "%rcx": { register_ = GPRegister::rcx; break; }
-        case "%rdx": { register_ = GPRegister::rdx; break; }
-        case "%rsp": { register_ = GPRegister::rsp; break; }
-        case "%rbp": { register_ = GPRegister::rbp; break; }
-        case "%rsi": { register_ = GPRegister::rsi; break; }
-        case "%rdi": { register_ = GPRegister::rdi; break; }
-        case "%r8": { register_ = GPRegister::r8; break; }
-        case "%r9": { register_ = GPRegister::r9; break; }
-        case "%r10": { register_ = GPRegister::r10; break; }
-        case "%r11": { register_ = GPRegister::r11; break; }
-        case "%r12": { register_ = GPRegister::r12; break; }
-        case "%r13": { register_ = GPRegister::r13; break; }
-        case "%r14": { register_ = GPRegister::r14; break; }
-        case "%r15": { register_ = GPRegister::r15; break; }
-        default { throw std::invalid_argument("invalid register name"); }
-    }
+
+    if (token.name == "%rax") { register_ = GPRegister::rax; }
+    else if (token.name == "%rbx") { register_ = GPRegister::rbx; }
+    else if (token.name == "%rcx") { register_ = GPRegister::rcx; }
+    else if (token.name == "%rdx") { register_ = GPRegister::rdx; }
+    else if (token.name == "%rsp") { register_ = GPRegister::rsp; }
+    else if (token.name == "%rbp") { register_ = GPRegister::rbp; }
+    else if (token.name == "%rsi") { register_ = GPRegister::rsi; }
+    else if (token.name == "%rdi") { register_ = GPRegister::rdi; }
+    else if (token.name == "%r8") { register_ = GPRegister::r8; }
+    else if (token.name == "%r9") { register_ = GPRegister::r9; }
+    else if (token.name == "%r10") { register_ = GPRegister::r10; }
+    else if (token.name == "%r11") { register_ = GPRegister::r11; }
+    else if (token.name == "%r12") { register_ = GPRegister::r12; }
+    else if (token.name == "%r13") { register_ = GPRegister::r13; }
+    else if (token.name == "%r14") { register_ = GPRegister::r14; }
+    else if (token.name == "%r15") { register_ = GPRegister::r15; }
+    else { throw std::invalid_argument("invalid register name"); }
 }
 
 int RegisterOperand::getValue() const {
