@@ -23,3 +23,7 @@ target_link_libraries(asm_tests asm Catch2::Catch2)
 # Добавляем исполняемый файл для тестов registers
 add_executable(registers_tests registers_testing.cpp)
 target_link_libraries(registers_tests cpu Catch2::Catch2)
+
+# Добавляем исполняемый файл для тестов memory
+add_executable(memory_tests memory_testing.cpp)
+target_link_libraries(memory_tests utils cpu Catch2::Catch2)
