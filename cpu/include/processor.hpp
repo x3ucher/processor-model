@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../utils/include/configconst.hpp"
-#include "include/registers.hpp"
-#include "include/thread.hpp"
-#include "include/memory.hpp"
+#include "../../utils/include/configconst.hpp"
+#include "../../cpu/include/registers.hpp"
+#include "../../cpu/include/thread.hpp"
+#include "../../cpu/include/memory.hpp"
+#include "../../instructions/include/commands.hpp"
 
 class CPU {
 private:

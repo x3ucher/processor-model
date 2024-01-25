@@ -17,6 +17,7 @@ public:
     Instruction(const TokenLine& tokens);
     std::vector<OperandPtr> getOperands();
     size_t getLabel();
+    uint8_t getOpcode() const { return opcode; }
     // void execute();
 };
 

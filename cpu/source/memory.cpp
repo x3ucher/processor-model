@@ -1,6 +1,8 @@
 #include "../include/memory.hpp"
 
-DataMemory::DataMemory() { data_ = nullptr; }
+DataMemory::DataMemory() {
+    data_.resize(0);
+}
 
 std::vector<BinData> DataMemory::getDump() {
     return data_;

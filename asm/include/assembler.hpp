@@ -2,8 +2,8 @@
 
 #include "../../utils/include/configconst.hpp"
 #include "../../utils/include/binarycode.hpp"
-#include "../../instructions/instructions.hpp"
-#include "../../cpu/include/processor.hpp"
+//#include "../../instructions/include/instructions.hpp"
+//#include "../../cpu/include/processor.hpp"
 
 enum class MaskInstr {
     L_, // label
@@ -36,7 +36,7 @@ public:
 };
 //======================================================//
 
-
+/*
 using CommandCreator = std::function<CommandPtr()>;
 //example
 //CommandPtr command = op_table.commandCreate(0x01);
@@ -48,9 +48,10 @@ public:
     CodeTable();    
     CommandPtr commandCreate(const Instruction& instr);
 };
+*/
 //======================================================//
 
-
+/*
 class Assemble : protected Lexer, protected CodeTable {
 private:    
     //RAM ram;
@@ -64,4 +65,5 @@ public:
     Assemble(const std::string& filename_, CPU& cpu_) : Lexer(filename_), cpu(cpu_) {}
     ProgramMemory interpreter();
 };
+*/
 //======================================================//

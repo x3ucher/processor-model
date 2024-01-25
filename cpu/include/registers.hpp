@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../utils/include/configconst.hpp"
+#include "../../utils/include/configconst.hpp"
 
 struct Register {
     GPRegister name = GPRegister::r15;
@@ -18,7 +18,7 @@ public:
 
     // getters
     Register getRegister(GPRegister name) const;
-    bool isLocked(GPRegister name) const;
+    bool isLocked(GPRegister name);
 
     // setters
     void setRegister(GPRegister name, int value);

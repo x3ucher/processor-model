@@ -19,6 +19,6 @@ add_library(asm STATIC ${SOURCE_FILES})
 set_target_properties(asm PROPERTIES LINKER_LANGUAGE CXX)
 
 # Указываем, что этот подпроект будет доступен другим подпроектам
-target_include_directories(asm PUBLIC ../utils ../cpu) 
+target_include_directories(asm PUBLIC ../utils) 
 
 target_include_directories(asm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

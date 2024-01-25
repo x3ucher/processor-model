@@ -53,14 +53,14 @@ enum class StatCode {
 
 // token type for lexer
 enum class SpecCode {
-    MNEMONIC, // 0
-    REGISTER, // 1
-    ADDRESS,
-    NUMBER,
-    LABEL,
-    DIRECTORY, // 5
-    END,
-    UNKNOWN
+    MNEMONIC,   // 0
+    REGISTER,   // 1
+    ADDRESS,    // 2
+    NUMBER,     // 3
+    LABEL,      // 4 
+    DIRECTORY,  // 5
+    END,        // 6
+    UNKNOWN     // 7
 };
 
 struct Token {

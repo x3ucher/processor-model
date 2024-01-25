@@ -1,0 +1,20 @@
+section .data
+    my_integer dd 10   ; Инициализация 32-битного целого числа
+
+_start:
+    ; Загрузка значения из памяти в регистр eax
+    mov %rax, my_integer
+
+    ; Сложение с непосредственным значением
+    add %rax, 5
+
+    ; Вычитание из регистра
+    sub %rax, 2
+
+    jmp  after_jump
+
+    sub %rax, 1 ; Результат в eax
+
+    after_jump:
+
+    add %rax, 5

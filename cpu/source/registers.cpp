@@ -9,7 +9,7 @@ RegisterBlock::RegisterBlock() {
 
 RegisterBlock::RegisterBlock(const std::array<int, NUMBER_OF_GPR>& value) {
     for (size_t i = 0; i < NUMBER_OF_GPR; i++) {
-        register_[i] = { static_cast<GPRegister>(i), value[i], false };
+        registers_[i] = { static_cast<GPRegister>(i), value[i], false };
     }
 }
 
@@ -18,7 +18,7 @@ Register RegisterBlock::getRegister(GPRegister name) const {
     return registers_[static_cast<size_t>(name)];
 }
 
-bool isLocked(GPRegister name) const {
+bool isLocked(GPRegister name) {
     return registers_[static_cast<size_t>(name)].lock;
 }
 
@@ -33,7 +33,7 @@ void RegisterBlock::setRegister( GPRegister name, int value, bool lock ) {
 } 
 
 void RegisterBlock::setRegisters(const std::array<Register, NUMBER_OF_GPR>& registers) {
-    registers_ = register;
+    registers_ = registers;
 }
 
 // other methods 

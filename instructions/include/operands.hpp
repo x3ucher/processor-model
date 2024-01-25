@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../utils/include/configconst.hpp"
-#include "../cpu/include/processor.hpp"
+#include "../../cpu/include/processor.hpp"
 #include "../../utils/include/binarycode.hpp"
 
 using OperandPtr = std::shared_ptr<Operand>;
