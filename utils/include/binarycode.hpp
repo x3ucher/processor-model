@@ -1,3 +1,5 @@
+#pragma once
+
 #include "configconst.hpp"
 
 #include <unordered_map>

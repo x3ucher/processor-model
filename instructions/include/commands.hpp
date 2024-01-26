@@ -21,6 +21,9 @@ public:
 };
 //==================================================//
 
+using CommandPtr = std::shared_ptr<Command>;
+//==================================================//
+
 class UnaryCommand : public Command {
 protected:
     OperandPtr operand;
@@ -106,4 +109,16 @@ public:
     DD();
     void execute() override;
 };
+//==================================================//
+
+class ProgramMemory {
+private:
+    std::vector<CommandPtr> program_;
+public:
+    ProgramMemory();
+    void pushCommand(const CommandPtr& command);
+    CommandPtr getCommand(size_t address);
+    void execute();
+};
+
 //==================================================//

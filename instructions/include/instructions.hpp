@@ -18,13 +18,3 @@ public:
     uint8_t getOpcode() const { return opcode; }
     CPU& getCPU() { return cpu_; }
 };
-
-class ProgramMemory {
-private:
-    std::vector<CommandPtr> program_;
-public:
-    ProgramMemory();
-    void pushCommand(const CommandPtr& command);
-    CommandPtr getCommand(size_t address);
-    void execute();
-};

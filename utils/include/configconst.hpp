@@ -1,5 +1,4 @@
-#ifndef CONFIG_CONST_H
-#define CONFIG_CONST_H
+#pragma once
 
 #include <utility>
 #include <vector>
@@ -90,5 +89,3 @@ static int toInteger(const std::string& s) {
         throw std::invalid_argument("argument isn't integer");
     } 
 }
-
-#endif // CONFIG_CONST_H

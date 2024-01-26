@@ -1,16 +1,22 @@
 #pragma once
 
-#include "../../utils/include/configconst.hpp"
+#include "../../utils/include/binarycode.hpp"
 #include "../../cpu/include/registers.hpp"
-#include "../../cpu/include/thread.hpp"
+// #include "../../cpu/include/thread.hpp"
 #include "../../cpu/include/memory.hpp"
 #include "../../instructions/include/commands.hpp"
 
+using DataMemoryPtr = std::shared_ptr<DataMemory>;
+using RegisterBlockPtr = std::shared_ptr<RegisterBlock>;
+
+using Flags = std::array<bool, NUMBER_OF_FLAGS>;
+
+using FlagsPtr = std::shared_ptr<Flags>;
+
 class CPU {
-private:
-    StatCode stat_;
 public:
-    std::array<bool, NUMBER_OF_FLAGS> flags_;
+    StatCode stat_;
+    Flags flags_;
     RegisterBlock registers_;
     // std::vector<Thread> threads_;
     DataMemory ram_;
@@ -18,7 +24,12 @@ public:
 
     // methods
     CPU::CPU() : stat_(StatCode::AOK), flags_({}), registers_(), ram_(), program_() {}
-
+    /* CPU() : stat_(StatCode::AOK),
+            flags_(std::make_shared<Flags>()),
+            registers_(std::make_shared<RegisterBlock>()),
+            ram_(std::make_shared<DataMemory>()),
+            program_() {}
+    */
     // getters
     StatCode getStat() const;
     size_t getPC() const;
@@ -27,5 +38,5 @@ public:
     void setStat(StatCode stat);
     void setPC(size_t address);
 
-    void execute();
+    // void execute();
 };

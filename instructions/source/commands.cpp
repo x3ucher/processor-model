@@ -1,5 +1,20 @@
 #include "../include/commands.hpp"
 
+// ProgramMemory
+ProgramMemory::ProgramMemory() {
+    program_.resize(0);
+}
+
+void ProgramMemory::pushCommand(const CommandPtr& command) {
+    program_.push_back(command);
+}
+
+CommandPtr ProgramMemory::getCommand(size_t address) {
+    return program_[address];
+}
+//=================================================//
+
+
 // Command
 StatCode Command::getStat() const {
     return processor.getStat();

@@ -28,3 +28,11 @@ BinData IBinary::initBinary(SpecCode type, const std::string& val) {
     return { type, binary };
 }
 
+int IBinary::initFromBinary(const BinData& data) const {
+    if (data.first == SpecCode::NUMBER) {
+        int value;
+        std::memcpy(&value, data.second.data(), sizeof(int));
+        return value;
+    }
+    throw std::invalid_argument("invalid command");
+}

@@ -47,14 +47,4 @@ size_t Instruction::getLabel() {
 }
 //================================================//
 
-// ProgramMemory
-ProgramMemory::ProgramMemory() {}
 
-void ProgramMemory::pushCommand(const CommandPtr& command) {
-    program_.push_back(command);
-}
-
-CommandPtr ProgramMemory::getCommand(size_t address) {
-    return program_[address];
-}
-//================================================//

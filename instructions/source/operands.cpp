@@ -7,9 +7,8 @@ OperandType Operand::getType() const {
 //====================================================//
 
 // RegisterOperand
-RegisterOperand::RegisterOperand(const Token& token, CPU& cpu) {
+RegisterOperand::RegisterOperand(const Token& token, RegisterBlock& reg, DataMemory& ram) : Operand(reg, ram) {
     type_ = OperandType::REGISTER_OPERAND;
-    processor_ = cpu;
 
     if (token.name == "%rax") { register_ = GPRegister::rax; }
     else if (token.name == "%rbx") { register_ = GPRegister::rbx; }
@@ -31,25 +30,24 @@ RegisterOperand::RegisterOperand(const Token& token, CPU& cpu) {
 }
 
 int RegisterOperand::getValue() const {
-    Register reg = processor_.registers_.getRegister(register_);
+    Register reg = registers.getRegister(register_);
     return reg.value;
 }
 
 void RegisterOperand::setValue(int value) {
-    processor_.registers_.setRegister(register_, value);
+    registers.setRegister(register_, value);
 }
 //====================================================//
 
 // MemoryOperand
-MemoryOperand::MemoryOperand(const Token& token, CPU& cpu) {
+MemoryOperand::MemoryOperand(const Token& token, RegisterBlock& reg, DataMemory& ram) : Operand(reg, ram) {
     type_ = OperandType::MEMORY_OPERAND;
-    processor_ = cpu;
     address_ = toInteger(token.name);
 }
 
 int MemoryOperand::getValue() const {
-    BinData binary = processor_.ram_.getData(address_);
-    int value = processor_.ram_.initFromBinary(binary);
+    BinData binary = memory.getData(address_);
+    int value = memory.initFromBinary(binary);
     return value;
 }
 
@@ -58,15 +56,14 @@ size_t MemoryOperand::getAddress() const {
 }
 
 void MemoryOperand::setValue(int value) {
-    BinData binary = processor_.ram_.initBinary(value);
-    processor_.ram_.setData(address_, binary);
+    BinData binary = memory.initBinary(value);
+    memory.setData(address_, binary);
 }
 //====================================================//
 
 // ImmediateOperand
-ImmediateOperand::ImmediateOperand(const Token& token, CPU& cpu) {
+ImmediateOperand::ImmediateOperand(const Token& token, RegisterBlock& reg, DataMemory& ram) : Operand(reg, ram) {
     type_ = OperandType::MEMORY_OPERAND;
-    processor_ = cpu;
     value_ = toInteger(token.name);
 }
 
