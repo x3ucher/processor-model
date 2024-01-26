@@ -17,3 +17,17 @@ void CPU::setPC(size_t address) {
     registers_.setRegister(GPRegister::r15, static_cast<int>(address));
 }
 //=============================================//
+
+// ProgramMemory
+ProgramMemory::ProgramMemory() {
+    program_.resize(0);
+}
+
+void ProgramMemory::pushCommand(const CommandPtr& command) {
+    program_.push_back(command);
+}
+
+CommandPtr ProgramMemory::getCommand(size_t address) {
+    return program_[address];
+}
+//=================================================//

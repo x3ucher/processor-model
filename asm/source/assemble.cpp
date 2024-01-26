@@ -62,10 +62,10 @@ void Assemble::processDirectory(TokenLine line) {
             throw std::invalid_argument("invalid asm code");
         }
     }
-    Instruction instr(line);
+    Instruction instr(line, cpu);
     CommandPtr command = commandCreate(instr);
-    command->execute();
-    value_names.pushLabel(line[0].name, command->getDataAddress());
+    command->execute(cpu);
+    value_names.pushLabel(line[0].name, std::dynamic_pointer_cast<DataDeclaration>(command)->getDataAddress());
 }
 
 
@@ -114,11 +114,11 @@ void Assemble::cleaner() {
         }
     }
 }
-*/
+
 //===========================================================//
 
 // CodeTable methods
-/*
+
 CodeTable::CodeTable() {
     opcode_to_command_[0x01] = []() { return std::make_unique<MOV>(); };
     // arithmetic
@@ -152,9 +152,9 @@ CodeTable::CodeTable() {
     opcode_to_command_[0x18] = []() { return std::make_unique<ThreadInit>(); };
     opcode_to_command_[0x19] = []() { return std::make_unique<ThreadTerminate>(); };
 }
-*/
-/*
-CommandPtr CodeTable::commandCreate(const Instruction& instr){
+
+
+CommandPtr CodeTable::commandCreate(Instruction& instr){
     auto it = opcode_to_command_.find(instr.getOpcode());
     if (it == opcode_to_command_.end()) {
         (it->second())->setInstruction(instr);
@@ -162,6 +162,6 @@ CommandPtr CodeTable::commandCreate(const Instruction& instr){
     }
     throw std::runtime_error("invalid opcode");
 } 
-*/
 
+*/
 //===========================================================//

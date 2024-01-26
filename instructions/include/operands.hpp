@@ -5,7 +5,6 @@
 #include "../../asm/include/assembler.hpp"
 
 
-
 class Operand {
 protected:
     OperandType type_;

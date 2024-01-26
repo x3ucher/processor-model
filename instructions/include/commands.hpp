@@ -7,17 +7,19 @@
 
 #include <memory>
 
+class CPU;
+
 class Command {
 protected:
-    CPU processor;
+    // CPU processor;
 public:
     virtual ~Command() = 0;
 
-    StatCode getStat() const;
-    void setStat(StatCode stat);
+    //StatCode getStat() const;
+    //void setStat(StatCode stat);
 
     virtual void setInstruction(Instruction& instruction);
-    virtual void execute() = 0;
+    virtual void execute(CPU& processor) = 0;
 };
 //==================================================//
 
@@ -86,39 +88,28 @@ public:
 class INC : public UnaryCommand {
 public:
     INC();
-    void execute() override;
+    void execute(CPU& processor) override;
 };
 //==================================================//
 
 class MOV : public BinaryCommand {
 public:
     MOV();
-    void execute() override;
+    void execute(CPU& processor) override;
 };
 //==================================================//
 
 class JMP : public JumpCommand {
 public:
     JMP();
-    void execute() override;
+    void execute(CPU& processor) override;
 };
 //==================================================//
 
 class DD : public DataDeclaration {
 public:
     DD();
-    void execute() override;
+    void execute(CPU& processor) override;
 };
 //==================================================//
 
-class ProgramMemory {
-private:
-    std::vector<CommandPtr> program_;
-public:
-    ProgramMemory();
-    void pushCommand(const CommandPtr& command);
-    CommandPtr getCommand(size_t address);
-    void execute();
-};
-
-//==================================================//

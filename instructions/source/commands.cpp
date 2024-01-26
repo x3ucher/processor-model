@@ -1,31 +1,18 @@
 #include "../include/commands.hpp"
 
-// ProgramMemory
-ProgramMemory::ProgramMemory() {
-    program_.resize(0);
-}
-
-void ProgramMemory::pushCommand(const CommandPtr& command) {
-    program_.push_back(command);
-}
-
-CommandPtr ProgramMemory::getCommand(size_t address) {
-    return program_[address];
-}
-//=================================================//
-
-
 // Command
+/*
 StatCode Command::getStat() const {
     return processor.getStat();
 }
+*/
 //=================================================//
 // UnaryCommand
 /* UnaryCommand::UnaryCommand(const Instruction& instruction) {
     operand = (instruction.getOperands())[0];
 }*/
 void UnaryCommand::setInstruction(Instruction& instr) {
-    processor = instr.getCPU();
+    // processor = instr.getCPU();
     operand = (instr.getOperands())[0];
 }
 
@@ -34,7 +21,7 @@ void UnaryCommand::setInstruction(Instruction& instr) {
     operands = { (instruction.getOperands())[0], (instruction.getOperands())[1] };
 }*/
 void BinaryCommand::setInstruction(Instruction& instr) {
-    processor = instr.getCPU();
+    // processor = instr.getCPU();
     operands = std::make_pair((instr.getOperands())[0], (instr.getOperands())[1]);
 }
 
@@ -43,7 +30,7 @@ void BinaryCommand::setInstruction(Instruction& instr) {
     label = instruction.getLabel();
 }*/
 void JumpCommand::setInstruction(Instruction& instr) {
-    processor = instr.getCPU();
+    // processor = instr.getCPU();
     label = instr.getLabel();
 }
 
@@ -52,7 +39,7 @@ void JumpCommand::setInstruction(Instruction& instr) {
     operands = instruction.getOperands();
 }*/
 void DataDeclaration::setInstruction(Instruction& instr) {
-    processor = instr.getCPU();
+    // processor = instr.getCPU();
     operands = instr.getOperands();
 }
 
@@ -61,7 +48,7 @@ void DataDeclaration::setInstruction(Instruction& instr) {
     label = instruction.getLabel();
 }*/
 void ThreadInit::setInstruction(Instruction& instr) {
-    processor = instr.getCPU();
+    // processor = instr.getCPU();
     label = instr.getLabel();
 }
 
@@ -73,7 +60,7 @@ void ThreadInit::setInstruction(Instruction& instr) {
 // INC
 //INC::INC(Instruction& instruction) : UnaryCommand(instruction) {}
 
-void INC::execute(){
+void INC::execute(CPU& processor){
     if (operand) {
         operand->setValue(operand->getValue() + 1);
         processor.setStat(StatCode::AOK);
@@ -88,12 +75,12 @@ void INC::execute(){
 // MOV
 //MOV::MOV(const Instruction& instruction) : BinaryCommand(instruction) {}
 
-void MOV::execute() {
+void MOV::execute(CPU& processor) {
     if (operands.first->getType() == OperandType::IMMEDIATE_OPERAND){
         processor.setStat(StatCode::INS);
     }
     else {
-        operands.first->setValue(operands.second->getValue);
+        operands.first->setValue(operands.second->getValue());
         processor.setStat(StatCode::AOK);
     }
 }
@@ -103,7 +90,7 @@ void MOV::execute() {
 // JMP
 //JMP::JMP(const Instruction& instruction) : JumpCommand(instruction) {}
 
-void JMP::execute() {
+void JMP::execute(CPU& processor) {
     try {
         processor.setPC(label - 1);
         processor.setStat(StatCode::AOK);
@@ -116,11 +103,11 @@ void JMP::execute() {
 // DD
 //DD::DD(const Instruction& instruction) : DataDeclaration(instruction) {}
 
-void DD::execute() {
+void DD::execute(CPU& processor) {
     try {
         address = processor.ram_.getLastAddress(); 
         for (size_t i = 0; i < operands.size(); i++) {
-            BinData bin = processor.ram_.initBinary(operands[i].type, operands[i].name);
+            BinData bin = processor.ram_.initBinary(operands[i]->getValue());
             processor.ram_.setData(bin);
         }
     }

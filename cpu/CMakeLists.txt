@@ -6,12 +6,12 @@ set(CMAKE_CXX_STANDARD 20)
 # Добавляем исходные файлы
 set(SOURCE_FILES
     source/memory.cpp
-    # source/processor.cpp
+    source/processor.cpp
     source/registers.cpp
     # source/thread.cpp
 
     include/memory.hpp
-    # include/processor.hpp
+    include/processor.hpp
     include/registers.hpp
     # include/thread.hpp
 )

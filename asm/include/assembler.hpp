@@ -3,7 +3,10 @@
 #include "../../utils/include/configconst.hpp"
 #include "../../utils/include/binarycode.hpp"
 //#include "../../instructions/include/instructions.hpp"
-//#include "../../cpu/include/processor.hpp"
+//#include "../../instructions/include/commands.hpp"
+#include "../../cpu/include/processor.hpp"
+
+#include <functional>
 
 enum class MaskInstr {
     L_, // label
@@ -46,15 +49,14 @@ private:
     std::unordered_map<uint8_t, CommandCreator> opcode_to_command_;
 public:
     CodeTable();    
-    CommandPtr commandCreate(const Instruction& instr);
+    CommandPtr commandCreate(Instruction& instr);
 };
-*/
+
 //======================================================//
 
-/*
+
 class Assemble : protected Lexer, protected CodeTable {
 private:    
-    //RAM ram;
     CPU cpu;
     LabelMap value_names;
     LabelMap labels;
