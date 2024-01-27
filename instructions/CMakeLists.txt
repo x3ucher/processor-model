@@ -5,13 +5,13 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Добавляем исходные файлы
 set(SOURCE_FILES
-    #source/commands.cpp
+    source/commands.cpp
     source/instructions.cpp
     source/operands.cpp
 
     include/operands.hpp
     include/instructions.hpp
-    #include/commands.hpp
+    include/commands.hpp
 )
 
 # Создаем библиотеку с именем instr

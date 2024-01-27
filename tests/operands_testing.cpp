@@ -9,7 +9,11 @@
 TEST_CASE("Operand getType", "[Operand]") {
     RegisterBlock registers;
     DataMemory memory;
-    OperandPtr operand = std::make_shared<RegisterOperand>(Token(SpecCode::REGISTER, "%rax"), registers, memory);
+
+    RegisterBlockPtr reg = std::make_shared<RegisterBlock>(registers);
+    DataMemoryPtr ram = std::make_shared<DataMemory>(memory);
+
+    OperandPtr operand = std::make_shared<RegisterOperand>(Token(SpecCode::REGISTER, "%rax"), reg, ram);
 
     REQUIRE(operand->getType() == OperandType::REGISTER_OPERAND);
 }
@@ -17,7 +21,11 @@ TEST_CASE("Operand getType", "[Operand]") {
 TEST_CASE("RegisterOperand getValue and setValue", "[RegisterOperand]") {
     RegisterBlock registers;
     DataMemory memory;
-    RegisterOperand operand(Token(SpecCode::REGISTER, "%rax"), registers, memory);
+
+    RegisterBlockPtr reg = std::make_shared<RegisterBlock>(registers);
+    DataMemoryPtr ram = std::make_shared<DataMemory>(memory);
+
+    RegisterOperand operand(Token(SpecCode::REGISTER, "%rax"), reg, ram);
 
     operand.setValue(42);
     REQUIRE(operand.getValue() == 42);
@@ -26,7 +34,11 @@ TEST_CASE("RegisterOperand getValue and setValue", "[RegisterOperand]") {
 TEST_CASE("MemoryOperand getValue, setValue, getAddress", "[MemoryOperand]") {
     RegisterBlock registers;
     DataMemory memory;
-    MemoryOperand operand(Token(SpecCode::ADDRESS, "13"), registers, memory);
+
+    RegisterBlockPtr reg = std::make_shared<RegisterBlock>(registers);
+    DataMemoryPtr ram = std::make_shared<DataMemory>(memory);
+
+    MemoryOperand operand(Token(SpecCode::ADDRESS, "13"), reg, ram);
 
     operand.setValue(123);
     REQUIRE(operand.getValue() == 123);
@@ -37,7 +49,11 @@ TEST_CASE("MemoryOperand getValue, setValue, getAddress", "[MemoryOperand]") {
 TEST_CASE("ImmediateOperand getValue and setValue", "[ImmediateOperand]") {
     RegisterBlock registers;
     DataMemory memory;
-    ImmediateOperand operand(Token(SpecCode::NUMBER, "-123"), registers, memory);
+
+    RegisterBlockPtr reg = std::make_shared<RegisterBlock>(registers);
+    DataMemoryPtr ram = std::make_shared<DataMemory>(memory);
+
+    ImmediateOperand operand(Token(SpecCode::NUMBER, "-123"), reg, ram);
 
     operand.setValue(99);
     REQUIRE(operand.getValue() == 99);
@@ -54,8 +70,10 @@ TEST_CASE("Instruction creation", "[Instruction]") {
     tokens.push_back(Token(SpecCode::LABEL, "111"));
 
     SECTION("Initialization and getOperands") {
-        REQUIRE_NOTHROW(Instruction(tokens, cpu));
-        Instruction instr(tokens, cpu);
+        CPUPtr proc = std::make_shared<CPU>(cpu);
+
+        REQUIRE_NOTHROW(Instruction(tokens, proc));
+        Instruction instr(tokens, proc);
 
         auto& operands = instr.getOperands();
 

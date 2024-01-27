@@ -6,16 +6,18 @@
 
 #include <memory>
 
+using CPUPtr = std::shared_ptr<CPU>;
+
 class Instruction {
 private:
-    CPU cpu_;
+    CPUPtr cpu_;
     size_t label;
     uint8_t opcode;
     std::vector<OperandPtr> operands_;
 public:
-    Instruction(const TokenLine& tokens, CPU& cpu);
+    Instruction(const TokenLine& tokens, CPUPtr cpu);
     std::vector<OperandPtr>& getOperands();
     size_t getLabel();
     uint8_t getOpcode() const { return opcode; }
-    CPU& getCPU() { return cpu_; }
+    CPUPtr& getCPU() { return cpu_; }
 };

@@ -4,14 +4,13 @@
 #include "../../cpu/include/registers.hpp"
 #include "../../asm/include/assembler.hpp"
 
-
 class Operand {
 protected:
     OperandType type_;
-    RegisterBlock registers;
-    DataMemory memory;
+    RegisterBlockPtr registers;    
+    DataMemoryPtr memory;
 public:
-    Operand(RegisterBlock& reg, DataMemory& ram) : registers(reg), memory(ram) {}
+    Operand(RegisterBlockPtr& reg, DataMemoryPtr& ram) : registers(reg), memory(ram) {}
     virtual ~Operand() = default;
 
     OperandType getType() const;
@@ -24,7 +23,7 @@ class RegisterOperand : public Operand {
 private:
     GPRegister register_;
 public:
-    RegisterOperand(const Token& token, RegisterBlock& reg, DataMemory& ram);
+    RegisterOperand(const Token& token, RegisterBlockPtr& reg, DataMemoryPtr& ram);
     int getValue() const override;
     void setValue(int value) override;
 };
@@ -34,7 +33,7 @@ class MemoryOperand : public Operand {
 private:
     size_t address_;
 public:
-    MemoryOperand(const Token& token, RegisterBlock& reg, DataMemory& ram);
+    MemoryOperand(const Token& token, RegisterBlockPtr& reg, DataMemoryPtr& ram);
     int getValue() const override;
     void setValue(int value) override;
     size_t getAddress() const;
@@ -45,7 +44,7 @@ class ImmediateOperand : public Operand {
 private:
     int value_;
 public:
-    ImmediateOperand(const Token& token, RegisterBlock& reg, DataMemory& ram);
+    ImmediateOperand(const Token& token, RegisterBlockPtr& reg, DataMemoryPtr& ram);
     int getValue() const override;
     void setValue(int value) override;
 };

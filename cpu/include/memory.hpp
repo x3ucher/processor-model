@@ -21,3 +21,5 @@ public:
     void setData(const BinData& value);
     void setData(size_t address, const BinData& value);
 };
+
+using DataMemoryPtr = std::shared_ptr<DataMemory>;

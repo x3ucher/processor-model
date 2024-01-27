@@ -1,4 +1,5 @@
 #include "../include/operands.hpp"
+#include <iostream>
 
 // Operand
 OperandType Operand::getType() const {
@@ -7,7 +8,7 @@ OperandType Operand::getType() const {
 //====================================================//
 
 // RegisterOperand
-RegisterOperand::RegisterOperand(const Token& token, RegisterBlock& reg, DataMemory& ram) : Operand(reg, ram) {
+RegisterOperand::RegisterOperand(const Token& token, RegisterBlockPtr& reg, DataMemoryPtr& ram) : Operand(reg, ram) {
     type_ = OperandType::REGISTER_OPERAND;
 
     if (token.name == "%rax") { register_ = GPRegister::rax; }
@@ -30,24 +31,24 @@ RegisterOperand::RegisterOperand(const Token& token, RegisterBlock& reg, DataMem
 }
 
 int RegisterOperand::getValue() const {
-    Register reg = registers.getRegister(register_);
+    Register reg = registers->getRegister(register_);
     return reg.value;
 }
 
 void RegisterOperand::setValue(int value) {
-    registers.setRegister(register_, value);
+    registers->setRegister(register_, value);
 }
 //====================================================//
 
 // MemoryOperand
-MemoryOperand::MemoryOperand(const Token& token, RegisterBlock& reg, DataMemory& ram) : Operand(reg, ram) {
+MemoryOperand::MemoryOperand(const Token& token, RegisterBlockPtr& reg, DataMemoryPtr& ram) : Operand(reg, ram) {
     type_ = OperandType::MEMORY_OPERAND;
     address_ = toInteger(token.name);
 }
 
 int MemoryOperand::getValue() const {
-    BinData binary = memory.getData(address_);
-    int value = memory.initFromBinary(binary);
+    BinData binary = memory->getData(address_);
+    int value = memory->initFromBinary(binary);
     return value;
 }
 
@@ -56,14 +57,14 @@ size_t MemoryOperand::getAddress() const {
 }
 
 void MemoryOperand::setValue(int value) {
-    BinData binary = memory.initBinary(value);
-    memory.setData(address_, binary);
+    BinData binary = memory->initBinary(value);
+    memory->setData(address_, binary);
 }
 //====================================================//
 
 // ImmediateOperand
-ImmediateOperand::ImmediateOperand(const Token& token, RegisterBlock& reg, DataMemory& ram) : Operand(reg, ram) {
-    type_ = OperandType::MEMORY_OPERAND;
+ImmediateOperand::ImmediateOperand(const Token& token, RegisterBlockPtr& reg, DataMemoryPtr& ram) : Operand(reg, ram) {
+    type_ = OperandType::IMMEDIATE_OPERAND;
     value_ = toInteger(token.name);
 }
 
