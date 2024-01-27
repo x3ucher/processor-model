@@ -56,7 +56,7 @@ public:
 //======================================================//
 
 
-class Assemble : protected Lexer, protected CodeTable {
+class Assemble : public Lexer, protected CodeTable {
 private:    
     CPUPtr cpu;
     LabelMap value_names;

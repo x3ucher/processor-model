@@ -6,6 +6,7 @@ Instruction::Instruction(const TokenLine& tokens, CPUPtr cpu) : cpu_(cpu) {
     DataMemoryPtr ram = cpu->ram_;
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
+        //std::cout << it->name << " " << static_cast<int>(it->type) << "\n";
         switch(it->type) {
             case SpecCode::ADDRESS: {
                 operands_.push_back(std::make_shared<MemoryOperand>(MemoryOperand(*it, reg, ram)));
@@ -24,11 +25,11 @@ Instruction::Instruction(const TokenLine& tokens, CPUPtr cpu) : cpu_(cpu) {
                 break;
             }
             case SpecCode::DIRECTORY: {
-                opcode = static_cast<uint8_t>(toInteger(it->name));
+                opcode = cpu->ram_->findOpcode(it->name);
                 break;
             }
             case SpecCode::MNEMONIC: {
-                opcode = static_cast<uint8_t>(toInteger(it->name));
+                opcode = cpu->ram_->findOpcode(it->name);
                 break;
             }
             default: {

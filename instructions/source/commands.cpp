@@ -21,7 +21,7 @@ void JumpCommand::setInstruction(Instruction& instr) {
 // DataDeclaration
 void DataDeclaration::setInstruction(Instruction& instr) {
     // processor = instr.getCPU();
-    operands = instr.getOperands();
+    operands = std::move(instr.getOperands());
 }
 
 // ThreadInit
@@ -76,11 +76,12 @@ void JMP::execute(CPUPtr& processor) {
 // DD
 void DD::execute(CPUPtr& processor) {
     try {
-        address = processor->ram_->getLastAddress(); 
+        address = processor->ram_->getDataSize(); 
         for (size_t i = 0; i < operands.size(); i++) {
             BinData bin = processor->ram_->initBinary(operands[i]->getValue());
             processor->ram_->setData(bin);
         }
+        processor->setStat(StatCode::AOK);
     }
     catch(...) { processor->setStat(StatCode::INS); }
 }

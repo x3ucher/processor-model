@@ -53,39 +53,46 @@ Token Lexer::createToken(const std::string& token) {
 
 // Assemble
 void Assemble::processDirectory(TokenLine line) {
-    for (size_t i = 2; i < line.size(); i++) {
+    Token first = line[0];
+    line.erase(line.begin());
+    for (size_t i = 1; i < line.size(); i++) {
         if (line[i].type == SpecCode::UNKNOWN && isInteger(line[i].name)) {
             line[i].type = SpecCode::NUMBER;
         }
-        else if (line[i].type != SpecCode::NUMBER) {
-            throw std::invalid_argument("invalid asm code");
+        else if (line[i].type != SpecCode::NUMBER) { 
+            throw std::invalid_argument("invalid asm code: dir");
         }
     }
     Instruction instr(line, cpu);
-    CommandPtr command = commandCreate(instr);
+    CommandPtr command = std::move(commandCreate(instr));
     command->execute(cpu);
-    value_names.pushLabel(line[0].name, std::dynamic_pointer_cast<DataDeclaration>(command)->getDataAddress());
+    value_names.pushLabel(first.name, std::dynamic_pointer_cast<DataDeclaration>(command)->getDataAddress());
 }
 
 
 void Assemble::cleaner() {
     // label declaration
+    std::cout << lines.size() << "\n";
     for (size_t i = 0; i < lines.size(); i++) {
         if (lines[i][0].type == SpecCode::LABEL) { // line starts with label
             if (lines[i].size() == 1) { // label declaration
                 labels.pushLabel(lines[i][0].name, i);
             }
-            else if (lines[i][1].type == SpecCode::DIRECTORY) { // data declaration
-                processDirectory(lines[i]);
-            }
-            else { 
-                throw std::invalid_argument("invalid asm code"); // error
-            }
+            //else 
+            //else { 
+            //    throw std::invalid_argument("invalid asm code"); // error
+            //}
             lines.erase(lines.begin() + i); // cleaning, because if its a label =>
             i--; // remember the address, if its a data declaration => is a preproc instr
             continue;
         }
-        break;
+        if (lines[i][1].type == SpecCode::DIRECTORY) { // data declaration
+            processDirectory(lines[i]);
+            lines.erase(lines.begin() + i); // cleaning, because if its a label =>
+            i--; // remember the address, if its a data declaration => is a preproc instr
+            continue;
+        }
+        //break;
     }
     // deleted label and data declaration
     for (size_t i = 0; i < lines.size(); i++) {
@@ -110,6 +117,10 @@ void Assemble::cleaner() {
                 break;
             }
             if (flag) { throw std::invalid_argument("invalid asm code"); }
+        }
+        if (lines[i][0].type == SpecCode::UNKNOWN) {
+            lines.erase(lines.begin() + i); // cleaning, because if its a label =>
+            i--;
         }
     }
 }
@@ -155,9 +166,11 @@ CodeTable::CodeTable() {
 
 CommandPtr CodeTable::commandCreate(Instruction& instr){
     auto it = opcode_to_command_.find(instr.getOpcode());
-    if (it == opcode_to_command_.end()) {
-        (it->second())->setInstruction(instr);
-        return it->second();
+    if (it != opcode_to_command_.end()) {
+        CommandPtr command = it->second();
+        command->setInstruction(instr);
+        return command;
+        //return opcode_to_command_)[instr.getOpcode()];
     }
     throw std::runtime_error("invalid opcode");
 } 
