@@ -63,7 +63,7 @@ TEST_CASE("ImmediateOperand getValue and setValue", "[ImmediateOperand]") {
 TEST_CASE("Instruction creation", "[Instruction]") {
     CPU cpu;
     TokenLine tokens;
-    tokens.push_back(Token(SpecCode::MNEMONIC, "1"));
+    tokens.push_back(Token(SpecCode::MNEMONIC, "mov"));
     tokens.push_back(Token(SpecCode::REGISTER, "%rax"));
     tokens.push_back(Token(SpecCode::ADDRESS, "12"));
     tokens.push_back(Token(SpecCode::NUMBER, "-123"));

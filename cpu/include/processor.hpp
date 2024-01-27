@@ -20,7 +20,7 @@ public:
     ProgramMemory();
     void pushCommand(const CommandPtr& command);
     CommandPtr getCommand(size_t address);
-    void execute();
+    // void execute((std::shared_ptr<CPU>)& cpu);
 };
 
 //==================================================//
@@ -50,7 +50,7 @@ public:
     void setStat(StatCode stat);
     void setPC(size_t address);
 
-    // void execute();
+    void execute();
 };
 //==================================================//
 

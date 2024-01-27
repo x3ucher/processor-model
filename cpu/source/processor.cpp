@@ -16,6 +16,10 @@ size_t CPU::getPC() const {
 void CPU::setPC(size_t address) {
     registers_->setRegister(GPRegister::r15, static_cast<int>(address));
 }
+
+//void CPU::execute() {
+//    program_.execute(std::make_shared<CPU>(this));
+//}
 //=============================================//
 
 // ProgramMemory
@@ -30,4 +34,6 @@ void ProgramMemory::pushCommand(const CommandPtr& command) {
 CommandPtr ProgramMemory::getCommand(size_t address) {
     return program_[address];
 }
+
+
 //=================================================//
