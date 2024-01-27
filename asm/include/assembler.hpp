@@ -2,10 +2,11 @@
 
 #include "../../utils/include/configconst.hpp"
 #include "../../utils/include/binarycode.hpp"
-//#include "../../instructions/include/instructions.hpp"
-//#include "../../instructions/include/commands.hpp"
-#include "../../cpu/include/processor.hpp"
+#include "../../instructions/include/instructions.hpp"
+#include "../../instructions/include/commands.hpp"
+//#include "../../cpu/include/processor.hpp"
 
+#include <memory>
 #include <functional>
 
 enum class MaskInstr {
@@ -24,7 +25,7 @@ enum class MaskInstr {
     XX // unknown/error
 };
 
-using TokenLine = std::vector<Token>;
+
 using ProgramLayout = std::vector<std::pair<MaskInstr, TokenLine>>;
 //======================================================//
 
@@ -39,7 +40,7 @@ public:
 };
 //======================================================//
 
-/*
+
 using CommandCreator = std::function<CommandPtr()>;
 //example
 //CommandPtr command = op_table.commandCreate(0x01);
@@ -57,15 +58,15 @@ public:
 
 class Assemble : protected Lexer, protected CodeTable {
 private:    
-    CPU cpu;
+    CPUPtr cpu;
     LabelMap value_names;
     LabelMap labels;
 public:
     void cleaner();
     void masking();
     void processDirectory(TokenLine line);
-    Assemble(const std::string& filename_, CPU& cpu_) : Lexer(filename_), cpu(cpu_) {}
+    Assemble(const std::string& filename_, CPUPtr& cpu_) : Lexer(filename_), cpu(cpu_) {}
     ProgramMemory interpreter();
 };
-*/
+
 //======================================================//

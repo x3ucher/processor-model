@@ -67,6 +67,8 @@ struct Token {
     std::string name;
 };
 
+using TokenLine = std::vector<Token>;
+
 static bool isInteger(const std::string& s) {
     try {
         std::stoi(s);

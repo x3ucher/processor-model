@@ -25,10 +25,12 @@ void DataDeclaration::setInstruction(Instruction& instr) {
 }
 
 // ThreadInit
+/*
 void ThreadInit::setInstruction(Instruction& instr) {
     // processor = instr.getCPU();
     label = instr.getLabel();
 }
+*/
 
 // ThreadTerminate
 //=================================================//

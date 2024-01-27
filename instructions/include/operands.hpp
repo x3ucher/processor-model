@@ -2,7 +2,8 @@
 
 #include "../../cpu/include/memory.hpp"
 #include "../../cpu/include/registers.hpp"
-#include "../../asm/include/assembler.hpp"
+//#include "../../asm/include/assembler.hpp"
+
 
 class Operand {
 protected:

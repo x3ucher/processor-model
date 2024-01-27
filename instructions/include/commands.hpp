@@ -60,6 +60,7 @@ public:
     void setInstruction(Instruction& instruction) override;
 };
 
+/*
 class ThreadInit : public Command {
 protected:
     size_t label;
@@ -67,6 +68,7 @@ public:
     // ThreadInit();
     ~ThreadInit() = default;
     void setInstruction(Instruction& instruction) override;
+    void execute(CPUPtr& processor) override;
 };
 
 class ThreadTerminate : public Command {
@@ -75,7 +77,9 @@ public:
     // ThreadTerminate() {}
     ~ThreadTerminate() = default;
     void setInstruction(Instruction& instruction) override;
+    void execute(CPUPtr& processor) override;
 };
+*/
 //==================================================//
 
 class INC : public UnaryCommand {
