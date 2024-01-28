@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <functional>
+#include <thread>
 
 enum class MaskInstr {
     L_, // label
@@ -61,11 +62,18 @@ public:
 //======================================================//
 
 
+struct LabelLine{
+    bool del = false;
+    size_t j = 0;
+};
+
+
 class Assemble : public Lexer, protected CodeTable {
 private:    
     CPUPtr cpu;
     // LabelMap value_names;
     // LabelMap labels;
+    void cleanerThread(std::vector<TokenLine>& lines, std::vector<LabelLine>& collector, size_t start, size_t end);
 public:
     void cleaner();
     void processDirectory(TokenLine line);

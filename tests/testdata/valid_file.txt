@@ -11,6 +11,8 @@ _start:
     ; Вычитание из регистра
     sub %rax, 2
 
+    inc my_integer
+
     jmp  after_jump
 
     sub %rax, 1 ; Результат в eax
