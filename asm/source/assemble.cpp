@@ -81,7 +81,7 @@ void Assemble::cleaner() {
             continue;
         }
         if (lines[i][0].type == SpecCode::LABEL ) {
-            labels.pushLabel(lines[i][0].name, i-1);
+            labels.pushLabel(lines[i][0].name, i);
             lines.erase(lines.begin() + i); // cleaning, because if its a label =>
             i--; // remember the address, if its a data declaration => is a preproc instr
             continue;
@@ -117,7 +117,7 @@ void Assemble::cleaner() {
     }
 }
 
-ProgramMemory& Assemble::interpreter() {
+ProgramMemory Assemble::interpreter() {
     ProgramMemory program;
     cleaner();
     for (size_t i = 0; i < lines.size(); i++) {
@@ -159,7 +159,7 @@ CodeTable::CodeTable() {
     // data definition
     //opcode_to_command_[0x14] = []() { return std::make_shared<DB>(); };
     //opcode_to_command_[0x15] = []() { return std::make_shared<DW>(); };
-    //opcode_to_command_[0x16] = []() { return std::make_shared<DD>(); };
+    opcode_to_command_[0x16] = []() { return std::make_shared<DD>(); };
     // misc
     opcode_to_command_[0x17] = []() { return std::make_shared<HLT>(); };
     //opcode_to_command_[0x18] = []() { return std::make_shared<ThreadInit>(); };

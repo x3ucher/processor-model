@@ -52,7 +52,7 @@ public:
     void setStat(StatCode stat);
     void setPC(size_t address);
 
-    void loadProgram(std::string filename);
+    void loadProgram(ProgramMemory& program);
     void execute();
 };
 //==================================================//

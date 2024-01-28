@@ -15,9 +15,10 @@ add_link_options(--coverage)
 
 # добавление подпроекта с библиотекой
 add_subdirectory(utils)
-# add_subdirectory(dialogue)
 add_subdirectory(myvector)
 add_subdirectory(asm)
 add_subdirectory(cpu)
 add_subdirectory(instructions)
 add_subdirectory(tests)
+
+add_subdirectory(dialogue)

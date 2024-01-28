@@ -30,4 +30,14 @@ TEST_CASE("CPU getters and setters", "[CPU]") {
         cpu.setPC(100);
         REQUIRE(cpu.getPC() == 100);
     }
+
+    SECTION("Execute program") {
+        CPUPtr cpu_ptr = std::make_shared<CPU>(cpu);
+        Assemble ass("/home/urtoach/Desktop/proc_model/tests/testdata/valid_file.txt", cpu_ptr);
+        //REQUIRE_NOTHROW(ass.interpreter());
+        ProgramMemory program = ass.interpreter();
+        REQUIRE_NOTHROW(cpu_ptr->loadProgram(program));
+        REQUIRE_NOTHROW(cpu_ptr->execute());
+
+    }
 }

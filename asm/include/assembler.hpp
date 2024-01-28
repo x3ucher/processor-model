@@ -70,7 +70,7 @@ public:
     void cleaner();
     void processDirectory(TokenLine line);
     Assemble(const std::string& filename_, CPUPtr& cpu_) : Lexer(filename_), cpu(cpu_) {}
-    ProgramMemory& interpreter();
+    ProgramMemory interpreter();
 };
 
 //======================================================//

@@ -1,4 +1,5 @@
 #include "../include/registers.hpp"
+#include <iostream>
 
 // constructors
 RegisterBlock::RegisterBlock() {
@@ -57,4 +58,15 @@ void RegisterBlock::unlockAll() {
     for (size_t i = 0; i < NUMBER_OF_GPR; i++) {
         registers_[i].lock = false;
     }
+}
+
+void RegisterBlock::print() {
+    std::cout << 
+    "------------------------------------------------------------------\n";
+    std::cout << "registers:" << std::endl;
+    for (size_t i = 0; i < NUMBER_OF_GPR; i++) {
+        std::cout << i << ") " << registers_[i].value << "\n";
+    }
+    std::cout << 
+    "\n------------------------------------------------------------------\n";
 }

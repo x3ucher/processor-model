@@ -21,6 +21,8 @@ public:
     void loadDump(const std::vector<BinData>& data);
     void setData(const BinData& value);
     void setData(size_t address, const BinData& value);
+
+    void print();
 };
 
 using DataMemoryPtr = std::shared_ptr<DataMemory>;

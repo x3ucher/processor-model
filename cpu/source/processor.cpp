@@ -30,10 +30,12 @@ void CPU::execute() {
     }
 }
 
-void CPU::loadProgram(std::string filename) {
-    CPUPtr ptr = std::make_shared<CPU>(*this); 
+void CPU::loadProgram(ProgramMemory& program) {
+    //CPUPtr ptr = std::make_shared<CPU>(*this); 
     //Assemble ass(filename, ptr);
+    program_ = program;
 }
+
 //=============================================//
 
 // ProgramMemory
@@ -54,6 +56,9 @@ void ProgramMemory::execute(CPUPtr& cpu) {
         size_t pc = cpu->getPC();
         (program_[pc])->execute(cpu);
         cpu->setPC(cpu->getPC() + 1);
+
+        //cpu->ram_->print();
+        //cpu->registers_->print();
     }
 }
 //=================================================//

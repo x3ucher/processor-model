@@ -28,3 +28,17 @@ void DataMemory::setData(const BinData& value) {
     data_.push_back(value);
 }
 
+void DataMemory::print() {
+    std::cout << 
+    "------------------------------------------------------------------\n";
+    std::cout << "memory dump:" << std::endl;
+    for (size_t i = 0; i < data_.size(); i++) {
+        std::cout << static_cast<int>(data_[i].first) << " ";
+        for (size_t j = 0; data_[i].second[j]; j++) {
+            std::cout << static_cast<int>(data_[i].second[j]) << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << 
+    "------------------------------------------------------------------\n";
+}

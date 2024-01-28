@@ -92,7 +92,7 @@ void MOV::execute(CPUPtr& processor) {
 }
 
 // ADD
-void MOV::execute(CPUPtr& processor) {
+void ADD::execute(CPUPtr& processor) {
     if (operands.first->getType() == OperandType::IMMEDIATE_OPERAND){
         processor->setStat(StatCode::INS);
     }
@@ -191,8 +191,8 @@ void SHL::execute(CPUPtr& processor) {
     }
 }
 
-// SHL
-void SHL::execute(CPUPtr& processor) {
+// SHR
+void SHR::execute(CPUPtr& processor) {
     if (operands.second->getValue() <= 0) {
         processor->setStat(StatCode::INS);
     } 
@@ -238,7 +238,7 @@ void JNE::execute(CPUPtr& processor) {
 // JG
 void JG::execute(CPUPtr& processor) {
     try {
-        if (~(processor->flags_[static_cast<size_t>(ConditionFlags::SF)] ^ processor->flags_[static_cast<size_t>(ConditionFlags::OF)]) & ~processor->flags_[static_cast<size_t>(ConditionFlags::ZF)]) {
+        if (!(processor->flags_[static_cast<size_t>(ConditionFlags::SF)] ^ processor->flags_[static_cast<size_t>(ConditionFlags::OF)]) & !processor->flags_[static_cast<size_t>(ConditionFlags::ZF)]) {
             processor->setPC(label - 1);
         }
         processor->setStat(StatCode::AOK);
@@ -249,7 +249,7 @@ void JG::execute(CPUPtr& processor) {
 // JGE
 void JGE::execute(CPUPtr& processor) {
     try {
-        if (~processor->flags_[static_cast<size_t>(ConditionFlags::SF)] ^ processor->flags_[static_cast<size_t>(ConditionFlags::OF)]) {
+        if (!processor->flags_[static_cast<size_t>(ConditionFlags::SF)] ^ processor->flags_[static_cast<size_t>(ConditionFlags::OF)]) {
             processor->setPC(label - 1);
         }
         processor->setStat(StatCode::AOK);

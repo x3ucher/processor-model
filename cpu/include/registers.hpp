@@ -30,6 +30,8 @@ public:
 
     void unlockRegister(GPRegister name);
     void unlockAll();
+
+    void print();
 };
 
 using RegisterBlockPtr = std::shared_ptr<RegisterBlock>;
