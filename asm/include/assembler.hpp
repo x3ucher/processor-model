@@ -63,10 +63,9 @@ private:
     LabelMap labels;
 public:
     void cleaner();
-    void masking();
     void processDirectory(TokenLine line);
     Assemble(const std::string& filename_, CPUPtr& cpu_) : Lexer(filename_), cpu(cpu_) {}
-    ProgramMemory interpreter();
+    ProgramMemory& interpreter();
 };
 
 //======================================================//

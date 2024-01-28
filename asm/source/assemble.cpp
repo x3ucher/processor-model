@@ -125,6 +125,17 @@ void Assemble::cleaner() {
     }
 }
 
+ProgramMemory& Assemble::interpreter() {
+    ProgramMemory program;
+    cleaner();
+    for (size_t i = 0; i < lines.size(); i++) {
+        Instruction instr(lines[i], cpu);
+        CommandPtr command = std::move(commandCreate(instr));
+        program.pushCommand(command);
+    }
+    return program;
+}
+
 //===========================================================//
 
 // CodeTable methods
@@ -158,7 +169,7 @@ CodeTable::CodeTable() {
     //opcode_to_command_[0x15] = []() { return std::make_shared<DW>(); };
     opcode_to_command_[0x16] = []() { return std::make_shared<DD>(); };
     // misc
-    //opcode_to_command_[0x17] = []() { return std::make_shared<HLT>(); };
+    opcode_to_command_[0x17] = []() { return std::make_shared<HLT>(); };
     //opcode_to_command_[0x18] = []() { return std::make_shared<ThreadInit>(); };
     //opcode_to_command_[0x19] = []() { return std::make_shared<ThreadTerminate>(); };
 }

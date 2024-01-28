@@ -8,7 +8,7 @@
 #include <iostream>
 #include <memory>
 
-class CPU;
+// class CPU;
 
 class Command {
 public:
@@ -58,6 +58,13 @@ public:
     size_t getDataAddress() { return address; }
 
     void setInstruction(Instruction& instruction) override;
+};
+
+class HLT : public Command {
+public:
+    ~HLT() = default;
+    void setInstruction(Instruction& instruction) override;
+    void execute(CPUPtr& processor) override;
 };
 
 /*

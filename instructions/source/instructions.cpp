@@ -32,6 +32,10 @@ Instruction::Instruction(const TokenLine& tokens, CPUPtr cpu) : cpu_(cpu) {
                 opcode = cpu->ram_->findOpcode(it->name);
                 break;
             }
+            case SpecCode::END: {
+                opcode = cpu->ram_->findOpcode("hlt");
+                break;
+            }
             default: {
                 throw std::invalid_argument("invalid instruction");
             }

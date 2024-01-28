@@ -35,6 +35,14 @@ void ThreadInit::setInstruction(Instruction& instr) {
 // ThreadTerminate
 //=================================================//
 
+// HLT
+void HLT::setInstruction(Instruction& instr) {}
+
+void HLT::execute(CPUPtr& processor) {
+    processor->setStat(StatCode::HLT);
+}
+//=================================================//
+
 // Unary
 // INC
 void INC::execute(CPUPtr& processor){

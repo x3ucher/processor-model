@@ -1,6 +1,6 @@
-#include "../include/processor.hpp"
+//#include "../include/processor.hpp"
 #include "../../instructions/include/commands.hpp"
-//#include "../../asm/include/assembler.hpp"
+#include "../../asm/include/assembler.hpp"
 
 //CPU
 StatCode CPU::getStat() const { 

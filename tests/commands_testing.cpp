@@ -4,6 +4,25 @@
 
 #include "../instructions/include/commands.hpp"
 
+TEST_CASE("HLT") {
+    CPU cpu;
+    cpu.registers_->setRegister(GPRegister::rax, 3);
+    cpu.ram_->setData(3, cpu.ram_->initBinary(-12));
+    CPUPtr cpu_ptr = std::make_unique<CPU>(cpu);
+
+    TokenLine tokens;
+    tokens.push_back(Token(SpecCode::END, ""));
+
+    Instruction instruction(tokens, cpu_ptr);
+
+    REQUIRE_NOTHROW(HLT());
+    HLT hlt;
+    hlt.setInstruction(instruction);
+    hlt.execute(cpu_ptr);
+
+    REQUIRE(cpu_ptr->getStat() == StatCode::HLT);
+}
+
 TEST_CASE("UnaryCommand", "[INC]") {
     CPU cpu;
     cpu.registers_->setRegister(GPRegister::rax, 3);
@@ -112,4 +131,5 @@ TEST_CASE("BinaryCommand", "[MOV]") {
 
         REQUIRE(cpu_ptr->getStat() == StatCode::INS);
     }
+
 }
