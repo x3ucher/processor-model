@@ -34,6 +34,7 @@ TokenLine Lexer::tokenizeLine(const std::string& line) {
 
 Token Lexer::createToken(const std::string& token) {
     if (token.back() == ':') { // label declarition
+        labels.pushLabel(token.substr(0, token.size() - 1), -2); 
         return { SpecCode::LABEL, token.substr(0, token.size() - 1) }; // .substr(0, token.size() - 1)
     }
     std::string new_token = token;
@@ -69,34 +70,25 @@ void Assemble::processDirectory(TokenLine line) {
     value_names.pushLabel(first.name, std::dynamic_pointer_cast<DataDeclaration>(command)->getDataAddress());
 }
 
-
 void Assemble::cleaner() {
-    // label declaration
-    std::cout << lines.size() << "\n";
     for (size_t i = 0; i < lines.size(); i++) {
-        if (lines[i][0].type == SpecCode::LABEL) { // line starts with label
-            if (lines[i].size() == 1) { // label declaration
-                labels.pushLabel(lines[i][0].name, i);
+        if (lines[i][0].type == SpecCode::UNKNOWN) {
+            if (lines[i][1].type == SpecCode::DIRECTORY) { // data declaration
+                processDirectory(lines[i]);
             }
-            //else 
-            //else { 
-            //    throw std::invalid_argument("invalid asm code"); // error
-            //}
             lines.erase(lines.begin() + i); // cleaning, because if its a label =>
             i--; // remember the address, if its a data declaration => is a preproc instr
             continue;
         }
-        if (lines[i][1].type == SpecCode::DIRECTORY) { // data declaration
-            processDirectory(lines[i]);
+        if (lines[i][0].type == SpecCode::LABEL ) {
+            labels.pushLabel(lines[i][0].name, i-1);
             lines.erase(lines.begin() + i); // cleaning, because if its a label =>
             i--; // remember the address, if its a data declaration => is a preproc instr
             continue;
         }
-        //break;
     }
-    // deleted label and data declaration
+    int deleted = 0;
     for (size_t i = 0; i < lines.size(); i++) {
-        bool flag = false;
         for (size_t j = 0; j < lines[i].size(); j++) {
             if (lines[i][j].type == SpecCode::UNKNOWN) { // unknown tokens
                 if (isInteger(lines[i][j].name)) {
@@ -104,8 +96,8 @@ void Assemble::cleaner() {
                     continue;
                 }
                 int adr = labels.getAddress(lines[i][j].name); // check label
-                if (adr != -1) {
-                    lines[i][j] = { SpecCode::LABEL, std::to_string(adr) };
+                if (adr > -1) {
+                    lines[i][j] = { SpecCode::LABEL, std::to_string(adr - deleted) };
                     continue;
                 }
                 adr = value_names.getAddress(lines[i][j].name); // check value name
@@ -113,14 +105,14 @@ void Assemble::cleaner() {
                     lines[i][j] = { SpecCode::ADDRESS, std::to_string(adr) };
                     continue;
                 }
-                flag = true; // still unknown => error
+                //flag = true; // still unknown => error
                 break;
             }
-            if (flag) { throw std::invalid_argument("invalid asm code"); }
-        }
-        if (lines[i][0].type == SpecCode::UNKNOWN) {
-            lines.erase(lines.begin() + i); // cleaning, because if its a label =>
-            i--;
+            if (lines[i][0].type == SpecCode::UNKNOWN) {
+                lines.erase(lines.begin() + i); // cleaning, because if its a label =>
+                i--;
+                deleted++;
+            }
         }
     }
 }
@@ -143,31 +135,31 @@ ProgramMemory& Assemble::interpreter() {
 CodeTable::CodeTable() {
     opcode_to_command_[0x01] = []() { return std::make_shared<MOV>(); };
     // arithmetic
-    //opcode_to_command_[0x02] = []() { return std::make_shared<ADD>(); };
-    //opcode_to_command_[0x03] = []() { return std::make_shared<SUB>(); };
+    opcode_to_command_[0x02] = []() { return std::make_shared<ADD>(); };
+    opcode_to_command_[0x03] = []() { return std::make_shared<SUB>(); };
     opcode_to_command_[0x04] = []() { return std::make_shared<INC>(); };
-    //opcode_to_command_[0x05] = []() { return std::make_shared<DEC>(); };
+    opcode_to_command_[0x05] = []() { return std::make_shared<DEC>(); };
     // logic
-    //opcode_to_command_[0x06] = []() { return std::make_shared<NOT>(); };
-    //opcode_to_command_[0x07] = []() { return std::make_shared<AND>(); };
-    //opcode_to_command_[0x08] = []() { return std::make_shared<OR>(); };
-    //opcode_to_command_[0x09] = []() { return std::make_shared<XOR>(); };
-    //opcode_to_command_[0x0A] = []() { return std::make_shared<CMP>(); };
+    opcode_to_command_[0x06] = []() { return std::make_shared<NOT>(); };
+    opcode_to_command_[0x07] = []() { return std::make_shared<AND>(); };
+    opcode_to_command_[0x08] = []() { return std::make_shared<OR>(); };
+    opcode_to_command_[0x09] = []() { return std::make_shared<XOR>(); };
+    opcode_to_command_[0x0A] = []() { return std::make_shared<CMP>(); };
     // shifts
-    //opcode_to_command_[0x0B] = []() { return std::make_shared<SHL>(); };
-    //opcode_to_command_[0x0C] = []() { return std::make_shared<SHR>(); };
+    opcode_to_command_[0x0B] = []() { return std::make_shared<SHL>(); };
+    opcode_to_command_[0x0C] = []() { return std::make_shared<SHR>(); };
     // jumps
     opcode_to_command_[0x0D] = []() { return std::make_shared<JMP>(); };
-    //opcode_to_command_[0x0E] = []() { return std::make_shared<JE>(); };
-    //opcode_to_command_[0x0F] = []() { return std::make_shared<JNE>(); };
-    //opcode_to_command_[0x10] = []() { return std::make_shared<JG>(); };
-    //opcode_to_command_[0x11] = []() { return std::make_shared<JGE>(); };
-    //opcode_to_command_[0x12] = []() { return std::make_shared<JL>(); };
-    //opcode_to_command_[0x13] = []() { return std::make_shared<JLE>(); };
+    opcode_to_command_[0x0E] = []() { return std::make_shared<JE>(); };
+    opcode_to_command_[0x0F] = []() { return std::make_shared<JNE>(); };
+    opcode_to_command_[0x10] = []() { return std::make_shared<JG>(); };
+    opcode_to_command_[0x11] = []() { return std::make_shared<JGE>(); };
+    opcode_to_command_[0x12] = []() { return std::make_shared<JL>(); };
+    opcode_to_command_[0x13] = []() { return std::make_shared<JLE>(); };
     // data definition
     //opcode_to_command_[0x14] = []() { return std::make_shared<DB>(); };
     //opcode_to_command_[0x15] = []() { return std::make_shared<DW>(); };
-    opcode_to_command_[0x16] = []() { return std::make_shared<DD>(); };
+    //opcode_to_command_[0x16] = []() { return std::make_shared<DD>(); };
     // misc
     opcode_to_command_[0x17] = []() { return std::make_shared<HLT>(); };
     //opcode_to_command_[0x18] = []() { return std::make_shared<ThreadInit>(); };
@@ -181,7 +173,6 @@ CommandPtr CodeTable::commandCreate(Instruction& instr){
         CommandPtr command = it->second();
         command->setInstruction(instr);
         return command;
-        //return opcode_to_command_)[instr.getOpcode()];
     }
     throw std::runtime_error("invalid opcode");
 } 

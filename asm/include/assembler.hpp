@@ -29,8 +29,13 @@ enum class MaskInstr {
 using ProgramLayout = std::vector<std::pair<MaskInstr, TokenLine>>;
 //======================================================//
 
-
+// -1 метка не найдена
+// > 0 адрес метки
+// -2 метку добавили без адреса
 class Lexer : public TokenTypeMap  {
+protected:
+    LabelMap value_names;
+    LabelMap labels;
 public:
     std::vector<TokenLine> lines;
     explicit Lexer(const std::string& filename); 
@@ -59,8 +64,8 @@ public:
 class Assemble : public Lexer, protected CodeTable {
 private:    
     CPUPtr cpu;
-    LabelMap value_names;
-    LabelMap labels;
+    // LabelMap value_names;
+    // LabelMap labels;
 public:
     void cleaner();
     void processDirectory(TokenLine line);

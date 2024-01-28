@@ -95,12 +95,71 @@ public:
     ~INC() = default;
     void execute(CPUPtr& processor) override;
 };
+
+class DEC : public UnaryCommand {
+public:
+    ~DEC() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class NOT : public UnaryCommand {
+public:
+    ~NOT() = default;
+    void execute(CPUPtr& processor) override;
+};
 //==================================================//
 
 class MOV : public BinaryCommand {
 public:
-    // MOV();
     ~MOV() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class ADD : public BinaryCommand {
+public:
+    ~ADD() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class SUB : public BinaryCommand {
+public:
+    ~SUB() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class AND : public BinaryCommand {
+public:
+    ~AND() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class OR : public BinaryCommand {
+public:
+    ~OR() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class XOR : public BinaryCommand {
+public:
+    ~XOR() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class CMP : public BinaryCommand {
+public:
+    ~CMP() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class SHL : public BinaryCommand {
+public:
+    ~SHL() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class SHR : public BinaryCommand {
+public:
+    ~SHR() = default;
     void execute(CPUPtr& processor) override;
 };
 //==================================================//
@@ -109,6 +168,42 @@ class JMP : public JumpCommand {
 public:
     // JMP();
     ~JMP() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class JE : public JumpCommand {
+public:
+    ~JE() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class JNE : public JumpCommand {
+public:
+    ~JNE() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class JG : public JumpCommand {
+public:
+    ~JG() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class JGE : public JumpCommand {
+public:
+    ~JGE() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class JL : public JumpCommand {
+public:
+    ~JL() = default;
+    void execute(CPUPtr& processor) override;
+};
+
+class JLE : public JumpCommand {
+public:
+    ~JLE() = default;
     void execute(CPUPtr& processor) override;
 };
 //==================================================//

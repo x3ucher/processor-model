@@ -64,3 +64,10 @@ TEST_CASE("Assembler cleaner correctly", "[Assemble]") {
     }
     std::cout << "---------------------------------------------------------------\n";
 }
+
+TEST_CASE("Interpreter", "[Assemble]"){
+    CPUPtr cpu = std::make_shared<CPU>();
+    Assemble assembler("/home/urtoach/Desktop/proc_model/tests/testdata/valid_file.txt", cpu);
+    REQUIRE_NOTHROW(assembler.interpreter());
+    //REQUIRE(assembler.interpreter().getCommand(2))
+}
