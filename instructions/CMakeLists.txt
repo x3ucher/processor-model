@@ -20,4 +20,4 @@ add_library(instr STATIC ${SOURCE_FILES})
 set_target_properties(instr PROPERTIES LINKER_LANGUAGE CXX)
 
 # Указываем, что этот подпроект будет доступен другим подпроектам
-target_include_directories(instr PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ../utils ../cpu) 
+target_include_directories(instr PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ../utils ../cpu ../asm) 

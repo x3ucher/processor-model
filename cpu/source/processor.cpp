@@ -1,4 +1,6 @@
 #include "../include/processor.hpp"
+#include "../../instructions/include/commands.hpp"
+//#include "../../asm/include/assembler.hpp"
 
 //CPU
 StatCode CPU::getStat() const { 
@@ -17,9 +19,21 @@ void CPU::setPC(size_t address) {
     registers_->setRegister(GPRegister::r15, static_cast<int>(address));
 }
 
-//void CPU::execute() {
-//    program_.execute(std::make_shared<CPU>(this));
-//}
+void CPU::execute() {
+    CPUPtr ptr = std::make_shared<CPU>(*this);
+    program_.execute(ptr);
+    if (getStat() == StatCode::ADR) {
+        throw std::runtime_error("invalid address");
+    }
+    else if (getStat() == StatCode::INS) {
+        throw std::runtime_error("invalid address");
+    }
+}
+
+void CPU::loadProgram(std::string filename) {
+    CPUPtr ptr = std::make_shared<CPU>(*this); 
+    //Assemble ass(filename, ptr);
+}
 //=============================================//
 
 // ProgramMemory
@@ -35,5 +49,11 @@ CommandPtr ProgramMemory::getCommand(size_t address) {
     return program_[address];
 }
 
-
+void ProgramMemory::execute(CPUPtr& cpu) {
+    while(cpu->getStat() == StatCode::AOK) {
+        size_t pc = cpu->getPC();
+        (program_[pc])->execute(cpu);
+        cpu->setPC(cpu->getPC() + 1);
+    }
+}
 //=================================================//

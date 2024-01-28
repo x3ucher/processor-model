@@ -26,7 +26,7 @@ target_link_libraries(memory_tests utils cpu Catch2::Catch2)
 
 # Добавляем исполняемый файл для тестов proc
 add_executable(cpu_tests cpu_testing.cpp)
-target_link_libraries(cpu_tests cpu utils Catch2::Catch2)
+target_link_libraries(cpu_tests cpu instr utils Catch2::Catch2)
 
 # Добавляем исполняемый файл для тестов operands
 add_executable(operands_tests operands_testing.cpp)
@@ -38,4 +38,4 @@ target_link_libraries(commands_tests instr utils cpu Catch2::Catch2)
 
 # Добавляем исполняемый файл для тестов asm
 add_executable(asm_tests asm_testing.cpp)
-target_link_libraries(asm_tests asm instr utils cpu Catch2::Catch2)
+target_link_libraries(asm_tests asm cpu instr utils Catch2::Catch2)

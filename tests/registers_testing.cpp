@@ -2,7 +2,7 @@
 
 #include <catch2/catch.hpp>
 
-#include "include/registers.hpp" 
+#include "../cpu/include/registers.hpp" 
 
 TEST_CASE("Register: Initialization") {
     Register reg = {GPRegister::rax, 10, false};

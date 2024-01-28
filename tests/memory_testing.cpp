@@ -2,7 +2,7 @@
 
 #include <catch2/catch.hpp>
 
-#include "include/memory.hpp"
+#include "../cpu/include/memory.hpp"
 
 TEST_CASE("DataMemory constructor creates an empty memory", "[DataMemory]") {
     DataMemory memory;

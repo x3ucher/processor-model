@@ -4,14 +4,17 @@
 #include "../../cpu/include/registers.hpp"
 // #include "../../cpu/include/thread.hpp"
 #include "../../cpu/include/memory.hpp"
+//#include "../../asm/include/assembler.hpp"
 // #include "../../instructions/include/commands.hpp"
 
 using Flags = std::array<bool, NUMBER_OF_FLAGS>;
-
 using FlagsPtr = std::shared_ptr<Flags>;
 
 class Command;
+class CPU;
+
 using CommandPtr = std::shared_ptr<Command>;
+using CPUPtr = std::shared_ptr<CPU>;
 
 class ProgramMemory {
 private:
@@ -20,7 +23,7 @@ public:
     ProgramMemory();
     void pushCommand(const CommandPtr& command);
     CommandPtr getCommand(size_t address);
-    // void execute((std::shared_ptr<CPU>)& cpu);
+    void execute(CPUPtr& cpu);
 };
 
 //==================================================//
@@ -30,7 +33,6 @@ public:
     StatCode stat_;
     Flags flags_;
     RegisterBlockPtr registers_;
-    // std::vector<Thread> threads_;
     DataMemoryPtr ram_;
     ProgramMemory program_; 
 
@@ -50,6 +52,7 @@ public:
     void setStat(StatCode stat);
     void setPC(size_t address);
 
+    void loadProgram(std::string filename);
     void execute();
 };
 //==================================================//

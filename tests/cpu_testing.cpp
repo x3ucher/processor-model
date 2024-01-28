@@ -2,7 +2,7 @@
 
 #include <catch2/catch.hpp>
 
-#include "include/processor.hpp"
+#include "../cpu/include/processor.hpp"
 
 TEST_CASE("CPU getters and setters", "[CPU]") {
     // Create an instance of CPU

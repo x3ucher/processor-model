@@ -2,7 +2,7 @@
 
 #include <catch2/catch.hpp>
 
-#include "include/binarycode.hpp"
+#include "../utils/include/binarycode.hpp"
 
 
 TEST_CASE("IBinary initBinary() Test", "[IBinary]") {

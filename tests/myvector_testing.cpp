@@ -3,7 +3,7 @@
 #include <sstream>
 #include <catch2/catch.hpp>
 
-#include "myvector.hpp"
+#include "../myvector/myvector.hpp"
 
 TEST_CASE("Constructor and Assignment Operator Test", "[MyVector]") {
     MyVector<int> vec1;
