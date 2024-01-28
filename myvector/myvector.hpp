@@ -198,6 +198,17 @@ public:
     MyVector(const MyVector<T> &other) : vector_(new T[other.size_]), size_(other.size_), capacity_(other.size_) {
         std::copy(other.vector_, other.vector_ + other.size_, vector_);
     }
+
+    // move constructor
+    /**
+     * @brief Move constructor for MyVector.
+     * @param other The source vector to be moved.
+     */
+    MyVector(MyVector<T> &&other) noexcept : vector_(other.vector_), size_(other.size_), capacity_(other.capacity_) {
+        other.vector_ = nullptr;
+        other.size_ = 0;
+        other.capacity_ = 0;
+    }
     //===============================================================//
     
     // operators
@@ -214,6 +225,24 @@ public:
             vector_ = new T[size_];
 
             std::copy(other.vector_, other.vector_ + other.size_, vector_);
+        }
+        return *this;
+    }
+
+    /**
+     * @brief Move assignment operator for MyVector.
+     * @param other The source vector to be moved.
+     * @return Reference to the assigned vector.
+     */
+    MyVector<T> &operator=(MyVector<T> &&other) noexcept {
+        if (this != &other) {
+            delete[] vector_;
+            vector_ = other.vector_;
+            size_ = other.size_;
+            capacity_ = other.capacity_;
+            other.vector_ = nullptr;
+            other.size_ = 0;
+            other.capacity_ = 0;
         }
         return *this;
     }
@@ -294,6 +323,70 @@ public:
     const_iterator cend() const noexcept {
         return const_iterator(vector_ + size_);
     }
+
+    /**
+     * @brief Inserts an element at the specified position.
+     * @param pos Iterator pointing to the position where the element should be inserted.
+     * @param value The value of the element to be inserted.
+     * @return Iterator pointing to the inserted element.
+     */
+    iterator insert(iterator pos, const T& value) {
+        size_t index = pos - begin(); // Индекс вставки
+        if (size_ >= capacity_) {
+            reserve(capacity_ == 0 ? 1 : capacity_ * 2);
+        }
+        std::copy_backward(vector_ + index, vector_ + size_, vector_ + size_ + 1);
+        vector_[index] = value;
+        size_++;
+        return begin() + index;
+    }
+
+    /**
+     * @brief Inserts an rvalue-qualified element at the specified position.
+     * @param pos Iterator pointing to the position where the element should be inserted.
+     * @param value The rvalue-qualified element to be inserted.
+     * @return Iterator pointing to the inserted element.
+     */
+    iterator insert(iterator pos, T&& value) {
+        size_t index = pos - begin();
+        if (size_ >= capacity_) {
+            reserve(capacity_ == 0 ? 1 : capacity_ * 2);
+        }
+        std::copy_backward(vector_ + index, vector_ + size_, vector_ + size_ + 1);
+        new (&vector_[index]) T(std::move(value));
+        size_++;
+        return begin() + index;
+    }
+
+    /**
+     * @brief Erases the element at the specified position.
+     * @param pos Iterator pointing to the position of the element to be erased.
+     * @return Iterator pointing to the next element after the erased one.
+     */
+    iterator erase(iterator pos) {
+        size_t index = pos - begin();
+        if (index >= size_) {
+            return end();
+        }
+        vector_[index].~T();
+        std::copy(vector_ + index + 1, vector_ + size_, vector_ + index);
+        size_--;
+        return begin() + index;
+    }
+
+    /**
+     * @brief Constructs and inserts an element at the end of the vector.
+     * @tparam Args Variadic template parameter pack for constructing the new element.
+     * @param args Arguments for constructing the new element.
+     */
+    template <typename... Args>
+    void emplace(Args&&... args) {
+        if (size_ >= capacity_) {
+            reserve(capacity_ == 0 ? 1 : capacity_ * 2);
+        }
+        new (&vector_[size_]) T(std::forward<Args>(args)...);
+        size_++;
+    }
     //===============================================================//
 
     // methods
@@ -338,6 +431,18 @@ public:
     }
 
     /**
+     * @brief Adds an rvalue-qualified element to the end of the vector.
+     * @param value The rvalue-qualified element to be added.
+     */
+    void push_back(T &&value) {
+        if (size_ >= capacity_) {
+            reserve(capacity_ == 0 ? 1 : capacity_ * 2);
+        }
+        new (&vector_[size_]) T(std::move(value));
+        size_++;
+    }
+
+    /**
      * @brief Remove the last element from the vector.
      */
     void pop_back() {
@@ -345,6 +450,8 @@ public:
             size_--;
         }
     }
+
+    
 };
 //===============================================================//
 
