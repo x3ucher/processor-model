@@ -9,6 +9,8 @@ set(CMAKE_CXX_STANDARD 20)
 # Добавляем исходные файлы
 set(SOURCE_FILES
     source/assemble.cpp
+    source/cleaner_base.cpp
+    source/cleaner_thread.cpp
 
     include/assembler.hpp
 )

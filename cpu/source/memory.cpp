@@ -29,12 +29,14 @@ void DataMemory::setData(const BinData& value) {
 }
 
 void DataMemory::print() {
+    if (data_.empty()) { std::cout << "memory is empty\n"; }
     std::cout << 
     "------------------------------------------------------------------\n";
     std::cout << "memory dump:" << std::endl;
     for (size_t i = 0; i < data_.size(); i++) {
         std::cout << static_cast<int>(data_[i].first) << " ";
-        for (size_t j = 0; data_[i].second[j]; j++) {
+        if (data_[i].second.empty()) { break; }
+        for (size_t j = 0; j < data_[i].second.size(); j++) { //39
             std::cout << static_cast<int>(data_[i].second[j]) << " ";
         }
         std::cout << std::endl;

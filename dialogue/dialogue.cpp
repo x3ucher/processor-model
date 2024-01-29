@@ -80,7 +80,7 @@ int main() {
         std::cout << "\tafter execute\n";
         printCPUStat(cpu);
 
-        bye();
+        //bye();
     }
     catch (const std::invalid_argument& e) {
         std::cerr << "Invalid argument error: " << e.what() << std::endl;

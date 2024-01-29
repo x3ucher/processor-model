@@ -143,6 +143,22 @@ public:
         --(*this);
         return *this;
     }
+
+    MVIterator operator + (difference_type n) const noexcept {
+        return MVIterator(value + n);
+    }
+
+    MVIterator operator - (difference_type n) const noexcept {
+        return MVIterator(value - n);
+    }
+
+    difference_type operator - (const MVIterator& other) const noexcept {
+        return value - other.value;
+    }
+
+    difference_type operator + (const MVIterator& other) const noexcept {
+        return value + other.value;
+    }
 };
 
 //===============================================================//
@@ -380,12 +396,19 @@ public:
      * @param args Arguments for constructing the new element.
      */
     template <typename... Args>
-    void emplace(Args&&... args) {
-        if (size_ >= capacity_) {
+    void emplace(iterator pos, Args&&... args) {
+        size_t index = pos - begin();
+        if (index > size_) {
+            throw std::out_of_range("Invalid iterator position");
+        }
+        if (size_ == capacity_) {
             reserve(capacity_ == 0 ? 1 : capacity_ * 2);
         }
-        new (&vector_[size_]) T(std::forward<Args>(args)...);
-        size_++;
+        for (size_t i = size_; i > index; --i) {
+            vector_[i] = std::move(vector_[i - 1]); // используйте std::move для эффективного перемещения
+        }
+        vector_[index] = T(std::forward<Args>(args)...);
+        ++size_;
     }
     //===============================================================//
 
