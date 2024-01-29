@@ -282,3 +282,79 @@ TEST_CASE("Emplace with invalid iterator position", "[emplace]") {
     REQUIRE_THROWS_AS(vec.emplace(it, 4), std::out_of_range);
     REQUIRE(vec.size() == 3);
 }
+
+// Тестирование метода filter
+TEST_CASE("MyVector filter method", "[MyVector]") {
+    SECTION("Filtering elements with a single thread") {
+        MyVector<int> myVector({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+        // Функция-предикат: оставляем только нечетные числа
+        auto isEven = [](int x) { return x % 2 == 0; };
+        REQUIRE_NOTHROW(myVector.filter(isEven, 1));
+        REQUIRE(myVector.size() == 5);
+        for (size_t i = 0; i < myVector.size(); i++) {
+            REQUIRE(myVector[i] == (i * 2) + 1);    
+        }
+    }
+
+    SECTION("Filtering elements with multiple threads") {
+        MyVector<int> myVector{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+        // Функция-предикат: оставляем только четные числа
+        auto isOdd = [](int x) { return x % 2 != 0; };
+
+        REQUIRE_NOTHROW(myVector.filter(isOdd, 5));
+
+        REQUIRE(myVector.size() == 5);
+        for (size_t i = 0; i < myVector.size(); i++) {
+            REQUIRE(myVector[i] == (i + 1) * 2);    
+        }
+    }
+}
+
+#include <chrono>
+
+TEST_CASE("Time measurement method filter MyVector", "[MyVector]") {
+    SECTION("Filtering elements with a single thread") {
+        MyVector<int> myVector;
+        for (int i = 1; i <= 1000000; ++i) {
+            myVector.push_back(i);
+        }
+
+        auto isEven = [](int x) { return x % 2 == 0; };
+        auto start_time = std::chrono::high_resolution_clock::now(); // Засекаем начальное время
+
+        myVector.filter(isEven, 1);
+
+        auto end_time = std::chrono::high_resolution_clock::now(); // Засекаем конечное время
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count(); // Вычисляем продолжительность в миллисекундах
+
+        std::cout << "Time taken: " << duration << " microseconds for single thread\n"; // Выводим время выполнения
+          
+        REQUIRE(myVector.size() == 500000);
+        for (size_t i = 0; i < myVector.size(); i++) {
+            REQUIRE(myVector[i] == (i * 2) + 1);
+        }
+    }
+
+    SECTION("Filtering elements with a multiple thread") {
+        MyVector<int> myVector;
+        for (int i = 1; i <= 1000000; ++i) {
+            myVector.push_back(i);
+        }
+
+        auto isEven = [](int x) { return x % 2 == 0; };
+        auto start_time = std::chrono::high_resolution_clock::now(); // Засекаем начальное время
+
+        myVector.filter(isEven, 8);
+
+        auto end_time = std::chrono::high_resolution_clock::now(); // Засекаем конечное время
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count(); // Вычисляем продолжительность в миллисекундах
+
+        std::cout << "Time taken: " << duration << " microseconds for multiple thread\n"; // Выводим время выполнения
+          
+        REQUIRE(myVector.size() == 500000);
+        for (size_t i = 0; i < myVector.size(); i++) {
+            REQUIRE(myVector[i] == (i * 2) + 1);
+        }
+    }
+}

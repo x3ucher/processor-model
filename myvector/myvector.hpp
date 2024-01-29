@@ -6,6 +6,10 @@
 #include <memory>
 #include <type_traits>
 
+#include <thread>
+#include <mutex>
+#include <algorithm>
+
 template<class T>
 class MyVector;
 
@@ -195,6 +199,14 @@ public:
      * @param size The initial size of the vector.
      */
     explicit MyVector(size_t size) : vector_(new T[size]), size_(size), capacity_(size) {}
+
+    /**
+     * @brief Constructor with an initializer list.
+     * @param init_list The initializer list to initialize the vector.
+     */
+    MyVector(std::initializer_list<T> init_list) : vector_(new T[init_list.size()]), size_(init_list.size()), capacity_(init_list.size()) {
+        std::copy(init_list.begin(), init_list.end(), vector_);
+    }
     //===============================================================//
 
     // destructor
@@ -224,7 +236,7 @@ public:
         other.vector_ = nullptr;
         other.size_ = 0;
         other.capacity_ = 0;
-    }
+    } 
     //===============================================================//
     
     // operators
@@ -390,6 +402,23 @@ public:
         return begin() + index;
     }
 
+    iterator erase(iterator first, iterator last) {
+        size_t index = first - begin();
+        size_t count = last - first;
+
+        if (index >= size_ || count == 0) {
+            return end();
+        }
+        // Удаляем элементы в диапазоне [first, last)
+        for (size_t i = 0; i < count; ++i) {
+            vector_[index + i].~T();
+        }
+        // Смещаем оставшиеся элементы на место удаленных
+        std::copy(vector_ + index + count, vector_ + size_, vector_ + index);
+        size_ -= count;
+        return begin() + index;
+    }
+    
     /**
      * @brief Constructs and inserts an element at the end of the vector.
      * @tparam Args Variadic template parameter pack for constructing the new element.
@@ -474,7 +503,46 @@ public:
         }
     }
 
-    
+
+    // auto predicate = [](T value) -> bool { return ; } 
+
+    template<typename Predicate>
+    void filter_chunk(size_t start, size_t end, Predicate predicate, std::vector<bool>& to_remove) {
+        for (size_t i = start; i < end; ++i) {
+            if (predicate(vector_[i])) {
+                to_remove[i] = true;
+            }
+        }
+    }
+
+    // filter
+    template<typename Predicate>
+    void filter(Predicate predicate, size_t num_threads) {
+        if ( num_threads < 1) { throw std::invalid_argument("invalid number of threads"); }
+
+        size_t chunk_size = size_ / num_threads;
+        std::vector<bool> to_remove(size_, false);
+
+        std::vector<std::thread> threads;
+
+        for (size_t i = 0; i < num_threads; ++i) {
+            //std::cout << i << " >>\n";
+            size_t start = i * chunk_size;
+            size_t end = (i == num_threads - 1) ? size_ : (i + 1) * chunk_size;
+            threads.emplace_back(&MyVector::filter_chunk<Predicate>, this, start, end, predicate, std::ref(to_remove));
+        }
+        for (auto &thread : threads) {
+            thread.join();
+        }
+
+        auto newEnd = std::remove_if(vector_, vector_ + size_, [&](const T& element) {
+            size_t index = &element - vector_;
+            return index < size_ && to_remove[index];
+        });
+
+        size_ = newEnd - vector_;
+        erase(newEnd, vector_ + size_);
+    }       
 };
 //===============================================================//
 

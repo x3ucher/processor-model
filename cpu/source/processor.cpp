@@ -57,8 +57,8 @@ void ProgramMemory::execute(CPUPtr& cpu) {
         (program_[pc])->execute(cpu);
         cpu->setPC(cpu->getPC() + 1);
 
-        //cpu->ram_->print();
-        //cpu->registers_->print();
+        cpu->ram_->print();
+        cpu->registers_->print();
     }
 }
 //=================================================//
