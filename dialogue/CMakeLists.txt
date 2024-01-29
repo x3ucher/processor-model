@@ -15,3 +15,8 @@ else()
 endif()
 
 target_link_libraries(dialogue asm cpu instr utils)
+
+# cmake -DTHREADS=OFF ..
+# cmake -DTHREADS=ON ..
+
+# /home/urtoach/Desktop/proc_model/tests/testdata/valid_file.txt

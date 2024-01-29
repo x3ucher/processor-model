@@ -22,3 +22,5 @@ add_subdirectory(instructions)
 add_subdirectory(tests)
 
 add_subdirectory(dialogue)
+
+# gcovr -r .. -e CMakeFiles --html-details -o coverage.html .

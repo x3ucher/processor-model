@@ -51,94 +51,72 @@ TEST_CASE("Push_Back, Pop_Back, Size, Capacity Test", "[MyVector]") {
 }
 
 TEMPLATE_TEST_CASE("MyVector Copy Constructor", "[MyVector][Copy Constructor]", int, double, char) {
-    // Create a MyVector with some initial values
     MyVector<TestType> original;
     original.push_back(1);
     original.push_back(2);
     original.push_back(3);
 
-    // Copy constructor
     MyVector<TestType> copy(original);
 
-    // Check that the copy has the same size
     REQUIRE(copy.size() == original.size());
 
-    // Check that the elements in the copy are the same as the original
     for (size_t i = 0; i < original.size(); ++i) {
         REQUIRE(copy[i] == original[i]);
     }
 }
 
 TEMPLATE_TEST_CASE("MyVector Move Constructor", "[MyVector][Move Constructor]", int, double, char) {
-    // Create a MyVector with some initial values
     MyVector<TestType> original;
     original.push_back(1);
     original.push_back(2);
     original.push_back(3);
 
-    // Move constructor
     MyVector<TestType> moved(std::move(original));
 
-    // Check that the original vector is empty after moving
     REQUIRE(original.size() == 0);
     REQUIRE(original.capacity() == 0);
     REQUIRE(original.begin() == original.end());
 
-    // Check that the moved vector has the same size and capacity
     REQUIRE(moved.size() == 3);
     REQUIRE(moved.capacity() >= 3);
 
-    // Check that the moved vector contains the correct values
     REQUIRE(moved[0] == 1);
     REQUIRE(moved[1] == 2);
     REQUIRE(moved[2] == 3);
 }
 
 TEMPLATE_TEST_CASE("MyVector Copy Assignment Operator", "[MyVector][Copy Assignment]", int, double, char) {
-    // Create a MyVector with some initial values
     MyVector<TestType> original;
     original.push_back(1);
     original.push_back(2);
     original.push_back(3);
-
-    // Create another MyVector
     MyVector<TestType> assigned;
-    
-    // Copy assignment operator
+
     assigned = original;
 
-    // Check that the assigned vector has the same size
     REQUIRE(assigned.size() == original.size());
 
-    // Check that the elements in the assigned vector are the same as the original
     for (size_t i = 0; i < original.size(); ++i) {
         REQUIRE(assigned[i] == original[i]);
     }
 }
 
 TEMPLATE_TEST_CASE("MyVector Move Assignment Operator", "[MyVector][Move Assignment]", int, double, char) {
-    // Create a MyVector with some initial values
     MyVector<TestType> original;
     original.push_back(1);
     original.push_back(2);
     original.push_back(3);
 
-    // Create another MyVector
     MyVector<TestType> assigned;
-
-    // Move assignment operator
     assigned = std::move(original);
 
-    // Check that the original vector is empty after moving
     REQUIRE(original.size() == 0);
     REQUIRE(original.capacity() == 0);
     REQUIRE(original.begin() == original.end());
 
-    // Check that the assigned vector has the same size and capacity
     REQUIRE(assigned.size() == 3);
     REQUIRE(assigned.capacity() >= 3);
 
-    // Check that the assigned vector contains the correct values
     REQUIRE(assigned[0] == 1);
     REQUIRE(assigned[1] == 2);
     REQUIRE(assigned[2] == 3);
@@ -149,25 +127,20 @@ TEMPLATE_TEST_CASE("MyVector Element Access Operator", "[MyVector][Element Acces
     MyVector<TestType> vec(initial_size);
 
     SECTION("Non-const version") {
-        // Modify the elements using the non-const operator[]
         for (size_t i = 0; i < initial_size; ++i) {
             vec[i] = static_cast<TestType>(i + 1);
         }
 
-        // Check that the modified values match the expected values
         for (size_t i = 0; i < initial_size; ++i) {
             REQUIRE(vec[i] == static_cast<TestType>(i + 1));
         }
     }
 
     SECTION("Const version") {
-        // Access the elements using the const operator[]
         for (size_t i = 0; i < initial_size; ++i) {
             const TestType& value = vec[i];
-            REQUIRE(value == vec[i]); // Elements should be equal to their default-initialized values
+            REQUIRE(value == vec[i]); 
         }
-
-        // Check bounds checking for const operator[]
         REQUIRE_THROWS_AS(vec[initial_size], std::invalid_argument);
     }
 }
@@ -177,7 +150,6 @@ TEMPLATE_TEST_CASE("MyVector Iterators", "[MyVector][Iterators]", int, double, c
     MyVector<TestType> vec(initial_size);
 
     SECTION("Non-const iterators") {
-        // Test begin() and end() for non-const vector
         auto it_begin = vec.begin();
         auto it_end = vec.end();
 
@@ -186,8 +158,7 @@ TEMPLATE_TEST_CASE("MyVector Iterators", "[MyVector][Iterators]", int, double, c
     }
 
     SECTION("Const iterators") {
-        // Test cbegin() and cend() for const vector
-        const MyVector<TestType>& constVec = vec; // create const reference
+        const MyVector<TestType>& constVec = vec; 
         auto it_cbegin = constVec.cbegin();
         auto it_cend = constVec.cend();
 
@@ -202,13 +173,13 @@ TEMPLATE_TEST_CASE("MyVector Insert, Erase, and Emplace", "[MyVector][Insert][Er
         vec.push_back(1);
         vec.push_back(3);
 
-        auto it = vec.begin() + 1; // Iterator pointing to the position where the element should be inserted
+        auto it = vec.begin() + 1; 
         auto inserted_it = vec.insert(it, 2.0);
 
         REQUIRE(vec.size() == 3);
         REQUIRE(*inserted_it == 2.0);
         REQUIRE(vec[0] == 1);
-        REQUIRE(vec[1] == 2.0);  // Исправлено ожидание
+        REQUIRE(vec[1] == 2.0);
         REQUIRE(vec[2] == 3);
     }
 
@@ -217,7 +188,7 @@ TEMPLATE_TEST_CASE("MyVector Insert, Erase, and Emplace", "[MyVector][Insert][Er
         vec.push_back(1);
         vec.push_back(3);
 
-        auto it = vec.begin() + 1; // Iterator pointing to the position where the element should be inserted
+        auto it = vec.begin() + 1; 
         auto inserted_it = vec.insert(it, TestType(2));
 
         REQUIRE(vec.size() == 3);
@@ -233,7 +204,7 @@ TEMPLATE_TEST_CASE("MyVector Insert, Erase, and Emplace", "[MyVector][Insert][Er
         vec.push_back(2);
         vec.push_back(3);
 
-        auto it = vec.begin() + 1; // Iterator pointing to the position of the element to be erased
+        auto it = vec.begin() + 1; 
         auto erased_it = vec.erase(it);
 
         REQUIRE(vec.size() == 2);
