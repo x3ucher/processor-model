@@ -101,5 +101,28 @@
 #### Память (DataMemory)
 ![image](https://github.com/urtoach/lab3oop/assets/115491314/267264e9-951e-46ce-a83b-b6056e905889)
 
-
+### **Поддерживаемые команды**  
+- mov
+- add
+- sub
+- inc
+- dec
+- not
+- and
+- or 
+- xor
+- cmp
+- shl
+- shr
+- jmp
+- je 
+- jne
+- jg 
+- jge
+- jl 
+- jle
+- db 
+- dw 
+- dd 
+- hlt
 
